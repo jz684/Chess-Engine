@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Queen extends ChessPiece{
 
     public Queen(BoardPosition position, int color) {
@@ -5,7 +7,16 @@ public class Queen extends ChessPiece{
     }
 
     @Override
+    public ArrayList<BoardPosition> findPossibleMoves(ChessBoard board) {
+        return null;
+    }
+
     public void setPossibleMoves() {
 
+    }
+
+    @Override
+    public String getName() {
+        return "Queen:" + this.color;
     }
 }

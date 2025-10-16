@@ -1,8 +1,10 @@
+import java.util.ArrayList;
+
 public abstract class ChessPiece extends BoardPosition{
     // 0: My Side
     // 1: Opponent Side
-    private int color;
-    private BoardPosition[] possibleMoves;
+    int color;
+    ArrayList<BoardPosition> possibleMoves;
 
     public ChessPiece() {
         super();
@@ -14,9 +16,26 @@ public abstract class ChessPiece extends BoardPosition{
         this.color = color;
     }
 
-    public BoardPosition[] getPossibleMoves() {
+    public void init(ChessBoard board) {
+        possibleMoves = findPossibleMoves(board);
+    }
+
+    public ArrayList<BoardPosition> getPossibleMoves() {
         return possibleMoves;
     }
 
-    public abstract void setPossibleMoves();
+    public void setPossibleMoves(ArrayList<BoardPosition> positions) {
+        this.possibleMoves = positions;
+    }
+
+    public abstract ArrayList<BoardPosition> findPossibleMoves(ChessBoard board);
+
+    public abstract String getName();
+
+    public void printPossibleMoves() {
+        for (BoardPosition position : possibleMoves) {
+            System.out.println(position.toString() + ", ");
+        }
+    }
+
 }

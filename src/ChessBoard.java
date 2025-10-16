@@ -9,6 +9,54 @@ public class ChessBoard {
         this.board = board;
     }
 
+    public void movePiece(ChessPiece piece, BoardPosition position) {
+        board[Math.abs(piece.row - 8)][piece.column - 97] = null;
+        board[Math.abs(position.row - 8)][position.column - 97] = piece;
+
+        piece.move(position);
+        updateBoard();
+    }
+
+    public ChessPiece getPieceAt(BoardPosition position) {
+        return board[Math.abs(position.row - 8)][position.column - 97];
+    }
+
+    public void updateBoard() {
+        for (int r = 0; r < board.length; r++) {
+            for (int c = 0; c < board[0].length; c++) {
+                if (board[r][c] != null) {
+                    board[r][c].init(this);
+                }
+            }
+        }
+    }
+
+    public boolean isEmpty(BoardPosition position) {
+        try {
+            return board[Math.abs(position.row - 8)][position.column - 97] == null &&
+                    (position.row > 0 && position.row < 9) && (position.column > 96 && position.column < 105);
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
+
+
+    }
+
+    public void printBoard() {
+        for (ChessPiece[] pieces : board) {
+            for (ChessPiece piece : pieces) {
+                if (piece == null) {
+                    System.out.print("[ null ]");
+                }
+                else {
+                    System.out.print("[" + piece.getName() + "]");
+                }
+            }
+            System.out.println();
+        }
+    }
+
     public ChessPiece[][] newBoard() {
         ChessPiece[][] board = new ChessPiece[8][8];
         board[0] = new ChessPiece[]{new Rook(new BoardPosition('a', 8), 1),
@@ -46,7 +94,9 @@ public class ChessBoard {
                 new Bishop(new BoardPosition('f', 1), 0),
                 new Knight(new BoardPosition('g', 1), 0),
                 new Rook(new BoardPosition('h', 1), 0)};
+
+        return board;
     }
 
-    return board;
+
 }

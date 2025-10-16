@@ -1,6 +1,6 @@
 public class BoardPosition {
-    private char column;
-    private int row;
+    char column;
+    int row;
 
     public BoardPosition() {
         this.column = 'a';
@@ -15,6 +15,10 @@ public class BoardPosition {
     public BoardPosition(BoardPosition position) {
         this.column = position.column;
         this.row = position.row;
+    }
+
+    public String toString() {
+        return "" + column + row;
     }
 
     public void move(BoardPosition pos) {

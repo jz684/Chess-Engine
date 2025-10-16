@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Pawn extends ChessPiece{
 
     public Pawn() {
@@ -9,7 +11,16 @@ public class Pawn extends ChessPiece{
     }
 
     @Override
+    public ArrayList<BoardPosition> findPossibleMoves(ChessBoard board) {
+        return null;
+    }
+
     public void setPossibleMoves() {
 
+    }
+
+    @Override
+    public String getName() {
+        return "Pawn:" + this.color;
     }
 }
