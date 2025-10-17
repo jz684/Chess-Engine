@@ -8,9 +8,9 @@ public class Bishop extends ChessPiece{
     }
 
     public ArrayList<BoardPosition> findPossibleMoves(ChessBoard board) {
-        ArrayList<BoardPosition> possibleMoves = new ArrayList<>();
+        ArrayList<BoardPosition> possibleMoves = new ArrayList<>(); // Return
 
-        BoardPosition currentPosition = this;
+        BoardPosition currentPosition = this; // The current pos of the piece into a BoardPosition
         int xDiff = -1;
         int yDiff = 1;
 
