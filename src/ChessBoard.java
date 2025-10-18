@@ -89,10 +89,35 @@ public class ChessBoard {
             return blackKing;
     }
 
-    // TODO write the boolean valid move that checks for checks and valid moves.
+    public boolean movePiece(String move) {
+        System.out.println(move);
+        try {
+            BoardPosition piecePosition;
+            BoardPosition targetPosition;
+            if (move.length() != 5)
+                throw new MoveFormatException("Invalid length");
 
-    public void movePiece(BoardPosition piecePosition, BoardPosition targetPosition) {
-        movePiece(getPieceAt(piecePosition), targetPosition);
+//            char positionCol = move.charAt(0);
+//            int positionRow = move.charAt(1);
+
+            piecePosition = new BoardPosition(move.substring(0, 2));
+
+//            positionCol = move.charAt(3);
+//            positionRow = move.charAt(4);
+
+            targetPosition = new BoardPosition(move.substring(3,5));
+
+            return movePiece(piecePosition, targetPosition);
+        }
+        catch (MoveFormatException e) {
+            System.out.println("Invalid move");
+            return false;
+        }
+    }
+
+    // returns if the move was successful
+    public boolean movePiece(BoardPosition piecePosition, BoardPosition targetPosition) {
+        return movePiece(getPieceAt(piecePosition), targetPosition);
     }
 
     public void tryMovePiece(ChessPiece piece, BoardPosition position) {
@@ -107,7 +132,7 @@ public class ChessBoard {
 
     }
 
-    public void movePiece(ChessPiece piece, BoardPosition position) {
+    public boolean movePiece(ChessPiece piece, BoardPosition position) {
 
         // if it is a valid move and the king is not in check.
 //            System.out.println("Twas a valid move");
@@ -118,6 +143,7 @@ public class ChessBoard {
 
                 piece.move(position);
                 updateBoard();
+                return true;
 
                 // TODO switchSides() that swaps who can move pieces after each move
 
@@ -128,6 +154,7 @@ public class ChessBoard {
         else {
             System.out.println("Invalid Move!");
         }
+        return false;
     }
 
     public ChessPiece getPieceAt(BoardPosition position) {
