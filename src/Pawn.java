@@ -77,6 +77,6 @@ public class Pawn extends ChessPiece{
 
     @Override
     public String getName() {
-        return "Pawn:" + this.color;
+        return " Pawn:" + this.color + " ";
     }
 }

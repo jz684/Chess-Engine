@@ -68,6 +68,6 @@ public class Rook extends ChessPiece{
 
     @Override
     public String getName() {
-        return "Rook:" + this.color;
+        return " Rook:" + this.color + " ";
     }
 }

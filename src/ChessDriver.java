@@ -25,6 +25,25 @@ public class ChessDriver {
         board.getPieceAt(new BoardPosition('e', 4)).printPossibleMoves();
         board.getPieceAt(new BoardPosition('d', 5)).printPossibleMoves();
 
+        board.movePiece(new BoardPosition('e', 4), new BoardPosition('e', 6));
+        board.printBoard();
+
+        System.out.println();
+        board.movePiece(new BoardPosition('c', 4), new BoardPosition('b', 5));
+        board.printBoard();
+        board.getPieceAt(new BoardPosition('b', 5)).printPossibleMoves();
+        System.out.println();
+        System.out.println(board.inCheck(board.blackKing));
+        board.movePiece(new BoardPosition('e', 7), new BoardPosition('e', 6));
+        board.printBoard();
+        board.getPieceAt(new BoardPosition('b', 5)).printPossibleMoves();
+
+        board.printBoard();
+        System.out.println();
+        board.movePiece(new BoardPosition('b', 8), new BoardPosition('d', 7));
+        board.printBoard();
+        System.out.println(board.inCheck(board.blackKing));
+
 
     }
 

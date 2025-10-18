@@ -3,12 +3,12 @@ import java.util.ArrayList;
 public class ChessBoard {
     private ChessPiece[][] board;
 
-    private King blackKing;
-    private King whiteKing;
+    King blackKing;
+    King whiteKing;
 
     public ChessBoard() {
-        blackKing = new King(new BoardPosition('e', 1), 0);
-        whiteKing = new King(new BoardPosition('e', 8), 1);
+        blackKing = new King(new BoardPosition('e', 8), 0);
+        whiteKing = new King(new BoardPosition('e', 1), 1);
         this.board = newBoard();
     }
 
@@ -20,19 +20,73 @@ public class ChessBoard {
         ArrayList<BoardPosition> possibleMoves = piece.findPossibleMoves(this);
 
         for (BoardPosition move : possibleMoves) {
-            if (move.equals(position))
+            if (move.equals(position)) {
                 return true;
+            }
         }
         return false;
     }
 
-    public boolean inCheck() {
+    // boolean inCheck(King k) is used for telling if you are in check at this moment
+    public boolean inCheck(King king) {
+        for (int r = 0; r < board.length; r++) {
 
+            for (int c = 0; c <board[0].length; c++) {
+
+                if (board[r][c] != null && board[r][c].color == king.color) {
+
+//                    System.out.println(board[r][c].getName());
+//                    System.out.println(board[r][c].toString());
+//                    board[r][c].printPossibleMoves();
+//                    System.out.println(king.toString());
+                    ArrayList<BoardPosition> possibleMoves = board[r][c].getPossibleMoves();
+                    for (BoardPosition move : possibleMoves) {
+                        if (move.equals(king)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println("In check inCheck(king)");
+        return false;
     }
 
+    // boolean inChecking(ChessPiece p, BoardPosition pos) is used for if moving will put you in check.
     public boolean inCheck(ChessPiece piece, BoardPosition position) {
         // Index through every piece on the board that isn't yours. if one of their possible moves
 
+        // A temp board to test if this move would put my king in check.
+        ChessBoard testBoard = this;
+        ChessPiece[][] board = testBoard.board;
+        King king = findKing(piece);
+
+        testBoard.tryMovePiece(piece, position);
+
+        for (int r = 0; r < board.length; r++) {
+            for (int c = 0; c <board[0].length; c++) {
+                if (board[r][c] != null) {
+                    ArrayList<BoardPosition> possibleMoves = board[r][c].getPossibleMoves();
+                    for (BoardPosition move : possibleMoves) {
+                        if (move.equals(king)) {
+                            return true;
+                        }
+                    }
+                }
+
+            }
+        }
+        return false;
+
+
+    }
+
+    // Simple function to find which king is being played based on the piece it was given
+    public King findKing(ChessPiece piece) {
+        if (piece.color == 0)
+            return whiteKing;
+        else
+            return blackKing;
     }
 
     // TODO write the boolean valid move that checks for checks and valid moves.
@@ -40,12 +94,40 @@ public class ChessBoard {
     public void movePiece(BoardPosition piecePosition, BoardPosition targetPosition) {
         movePiece(getPieceAt(piecePosition), targetPosition);
     }
-    public void movePiece(ChessPiece piece, BoardPosition position) {
+
+    public void tryMovePiece(ChessPiece piece, BoardPosition position) {
+
+        // if it is a valid move and the king is not in check.
+//            System.out.println("Twas a valid move");
         board[Math.abs(piece.row - 8)][piece.column - 97] = null;
         board[Math.abs(position.row - 8)][position.column - 97] = piece;
 
         piece.move(position);
         updateBoard();
+
+    }
+
+    public void movePiece(ChessPiece piece, BoardPosition position) {
+
+        // if it is a valid move and the king is not in check.
+//            System.out.println("Twas a valid move");
+        if (validMove(piece, position)){
+            if (!inCheck(piece, position)){
+                board[Math.abs(piece.row - 8)][piece.column - 97] = null;
+                board[Math.abs(position.row - 8)][position.column - 97] = piece;
+
+                piece.move(position);
+                updateBoard();
+
+                // TODO switchSides() that swaps who can move pieces after each move
+
+            }
+            else
+                System.out.println("In check: " + piece.getName() + " " + piece.toString() + " - " + position.toString());
+        }
+        else {
+            System.out.println("Invalid Move!");
+        }
     }
 
     public ChessPiece getPieceAt(BoardPosition position) {
@@ -78,7 +160,7 @@ public class ChessBoard {
         for (ChessPiece[] pieces : board) {
             for (ChessPiece piece : pieces) {
                 if (piece == null) {
-                    System.out.print("[ null ]");
+                    System.out.print("[  null  ]");
                 }
                 else {
                     System.out.print("[" + piece.getName() + "]");

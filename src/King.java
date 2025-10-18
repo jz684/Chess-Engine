@@ -36,6 +36,6 @@ public class King extends ChessPiece{
 
     @Override
     public String getName() {
-        return "King:" + this.color;
+        return " King:" + this.color + " ";
     }
 }

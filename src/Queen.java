@@ -139,6 +139,6 @@ public class Queen extends ChessPiece{
 
     @Override
     public String getName() {
-        return "Queen:" + this.color;
+        return "Queen: " + this.color;
     }
 }
