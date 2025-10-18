@@ -1,7 +1,14 @@
+import java.util.ArrayList;
+
 public class ChessBoard {
     private ChessPiece[][] board;
 
+    private King blackKing;
+    private King whiteKing;
+
     public ChessBoard() {
+        blackKing = new King(new BoardPosition('e', 1), 0);
+        whiteKing = new King(new BoardPosition('e', 8), 1);
         this.board = newBoard();
     }
 
@@ -9,13 +16,24 @@ public class ChessBoard {
         this.board = board;
     }
 
-//    public boolean validMove(ChessPiece piece, BoardPosition position) {
-//
-//    }
-//
-//    public boolean inCheck(ChessPiece piece, BoardPosition position) {
-//        // Index through every piece on the board that isnt yours. if one of their possible moves
-//    }
+    public boolean validMove(ChessPiece piece, BoardPosition position) {
+        ArrayList<BoardPosition> possibleMoves = piece.findPossibleMoves(this);
+
+        for (BoardPosition move : possibleMoves) {
+            if (move.equals(position))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean inCheck() {
+
+    }
+
+    public boolean inCheck(ChessPiece piece, BoardPosition position) {
+        // Index through every piece on the board that isn't yours. if one of their possible moves
+
+    }
 
     // TODO write the boolean valid move that checks for checks and valid moves.
 
@@ -76,7 +94,7 @@ public class ChessBoard {
                 new Knight(new BoardPosition('b', 8), 1),
                 new Bishop(new BoardPosition('c', 8), 1),
                 new Queen(new BoardPosition('d', 8), 1),
-                new King(new BoardPosition('e', 8), 1),
+                whiteKing,
                 new Bishop(new BoardPosition('f', 8), 1),
                 new Knight(new BoardPosition('g', 8), 1),
                 new Rook(new BoardPosition('h', 8), 1)};
@@ -103,7 +121,7 @@ public class ChessBoard {
                 new Knight(new BoardPosition('b', 1), 0),
                 new Bishop(new BoardPosition('c', 1), 0),
                 new Queen(new BoardPosition('d', 1), 0),
-                new King(new BoardPosition('e', 1), 0),
+                blackKing,
                 new Bishop(new BoardPosition('f', 1), 0),
                 new Knight(new BoardPosition('g', 1), 0),
                 new Rook(new BoardPosition('h', 1), 0)};
