@@ -21,6 +21,14 @@ public class BoardPosition {
         return "" + column + row;
     }
 
+    public boolean equals(BoardPosition position) {
+        return position.row == row && position.column == column;
+    }
+
+    public boolean isNotOutOfBounds() {
+        return (column >= 'a' && column <= 'h') && (row >= 1 && row <= 8);
+    }
+
     public void move(BoardPosition pos) {
         this.column = pos.column;
         this.row = pos.row;

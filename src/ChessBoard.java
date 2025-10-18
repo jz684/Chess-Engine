@@ -9,6 +9,19 @@ public class ChessBoard {
         this.board = board;
     }
 
+//    public boolean validMove(ChessPiece piece, BoardPosition position) {
+//
+//    }
+//
+//    public boolean inCheck(ChessPiece piece, BoardPosition position) {
+//        // Index through every piece on the board that isnt yours. if one of their possible moves
+//    }
+
+    // TODO write the boolean valid move that checks for checks and valid moves.
+
+    public void movePiece(BoardPosition piecePosition, BoardPosition targetPosition) {
+        movePiece(getPieceAt(piecePosition), targetPosition);
+    }
     public void movePiece(ChessPiece piece, BoardPosition position) {
         board[Math.abs(piece.row - 8)][piece.column - 97] = null;
         board[Math.abs(position.row - 8)][position.column - 97] = piece;
@@ -37,7 +50,7 @@ public class ChessBoard {
                     (position.row > 0 && position.row < 9) && (position.column > 96 && position.column < 105);
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            return false;
+            return true;
         }
 
 

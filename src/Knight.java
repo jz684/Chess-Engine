@@ -14,42 +14,70 @@ public class Knight extends ChessPiece{
         BoardPosition currentPosition = this; // The current pos of the piece into a BoardPosition
 
         BoardPosition frontLeft = new BoardPosition((char) (currentPosition.column + 2), currentPosition.row - 1);
-        if (board.isEmpty(frontLeft))
+        if (frontLeft.isNotOutOfBounds() && board.isEmpty(frontLeft))
             possibleMoves.add(frontLeft);
+        // Code to find the color at the next piece, and add it to the arraylist if it is the opposite color
+        else if (frontLeft.isNotOutOfBounds() && !board.isEmpty(frontLeft) && board.getPieceAt(frontLeft).color != this.color) {
+            possibleMoves.add(frontLeft);
+        }
 
         BoardPosition frontRight = new BoardPosition((char) (currentPosition.column + 2), currentPosition.row + 1);
-        if (board.isEmpty(frontRight))
+        if (frontRight.isNotOutOfBounds() && board.isEmpty(frontRight))
             possibleMoves.add(frontRight);
+            // Code to find the color at the next piece, and add it to the arraylist if it is the opposite color
+        else if (frontRight.isNotOutOfBounds() && !board.isEmpty(frontRight) && board.getPieceAt(frontRight).color != this.color) {
+            possibleMoves.add(frontRight);
+        }
 
         BoardPosition rightUp = new BoardPosition((char) (currentPosition.column + 1), currentPosition.row + 2);
-        if (board.isEmpty(rightUp))
+        if (rightUp.isNotOutOfBounds() && board.isEmpty(rightUp))
             possibleMoves.add(rightUp);
+            // Code to find the color at the next piece, and add it to the arraylist if it is the opposite color
+        else if (rightUp.isNotOutOfBounds() && !board.isEmpty(rightUp) && board.getPieceAt(rightUp).color != this.color) {
+            possibleMoves.add(rightUp);
+        }
 
         BoardPosition rightDown = new BoardPosition((char) (currentPosition.column - 1), currentPosition.row + 2);
-        if (board.isEmpty(rightDown))
+        if (rightDown.isNotOutOfBounds() && board.isEmpty(rightDown))
             possibleMoves.add(rightDown);
+            // Code to find the color at the next piece, and add it to the arraylist if it is the opposite color
+        else if (rightDown.isNotOutOfBounds() && !board.isEmpty(rightDown) && board.getPieceAt(rightDown).color != this.color) {
+            possibleMoves.add(rightDown);
+        }
 
         BoardPosition backRight = new BoardPosition((char) (currentPosition.column - 2), currentPosition.row + 1);
-        if (board.isEmpty(backRight))
+        if (backRight.isNotOutOfBounds() && board.isEmpty(backRight))
             possibleMoves.add(backRight);
+            // Code to find the color at the next piece, and add it to the arraylist if it is the opposite color
+        else if (backRight.isNotOutOfBounds() && !board.isEmpty(backRight) && board.getPieceAt(backRight).color != this.color) {
+            possibleMoves.add(backRight);
+        }
 
         BoardPosition backLeft = new BoardPosition((char) (currentPosition.column - 2), currentPosition.row - 1);
-        if (board.isEmpty(backLeft))
+        if (backLeft.isNotOutOfBounds() && board.isEmpty(backLeft))
             possibleMoves.add(backLeft);
+            // Code to find the color at the next piece, and add it to the arraylist if it is the opposite color
+        else if (backLeft.isNotOutOfBounds() && !board.isEmpty(backLeft) && board.getPieceAt(backLeft).color != this.color) {
+            possibleMoves.add(backLeft);
+        }
 
         BoardPosition leftDown = new BoardPosition((char) (currentPosition.column - 1), currentPosition.row - 2);
-        if (board.isEmpty(leftDown))
+        if (leftDown.isNotOutOfBounds() && board.isEmpty(leftDown))
             possibleMoves.add(leftDown);
+            // Code to find the color at the next piece, and add it to the arraylist if it is the opposite color
+        else if (leftDown.isNotOutOfBounds() && !board.isEmpty(leftDown) && board.getPieceAt(leftDown).color != this.color) {
+            possibleMoves.add(leftDown);
+        }
 
         BoardPosition leftUp = new BoardPosition((char) (currentPosition.column + 1), currentPosition.row - 2);
-        if (board.isEmpty(leftUp))
+        if (leftUp.isNotOutOfBounds() && board.isEmpty(leftUp))
             possibleMoves.add(leftUp);
+            // Code to find the color at the next piece, and add it to the arraylist if it is the opposite color
+        else if (leftUp.isNotOutOfBounds() && !board.isEmpty(leftUp) && board.getPieceAt(leftUp).color != this.color) {
+            possibleMoves.add(leftUp);
+        }
 
         return possibleMoves;
-    }
-
-    public void setPossibleMoves() {
-
     }
 
     @Override

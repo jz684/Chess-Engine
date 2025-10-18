@@ -34,8 +34,9 @@ public abstract class ChessPiece extends BoardPosition{
 
     public void printPossibleMoves() {
         for (BoardPosition position : possibleMoves) {
-            System.out.println(position.toString() + ", ");
+            System.out.print(position.toString() + ", ");
         }
+        System.out.println();
     }
 
 }
