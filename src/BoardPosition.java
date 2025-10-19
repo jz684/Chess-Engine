@@ -17,7 +17,8 @@ public class BoardPosition {
         this.row = position.row;
     }
 
-    public BoardPosition(String positionStr) {
+    public BoardPosition(String positionStr) throws MoveFormatException {
+        positionStr = testFormat(positionStr);
         this.column = positionStr.charAt(0);
         this.row = (int) positionStr.charAt(1) - 48;
     }
@@ -32,9 +33,11 @@ public class BoardPosition {
             throw new MoveFormatException("Invalid length");
 
         char positionCol = positionStr.charAt(0);
-        int positionRow = positionStr.charAt(1);
+        int positionRow = positionStr.charAt(1) - 48;
 
-        if (!validBounds(positionCol, 61, 68) || !validBounds(positionRow, 1, 8)) {
+//        System.out.println("debug 3");
+
+        if (!validBounds(positionCol, 97, 104) || !validBounds(positionRow, 1, 8)) {
             throw new MoveFormatException("Invalid current position");
         }
 

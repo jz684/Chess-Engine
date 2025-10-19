@@ -16,6 +16,20 @@ public class ChessBoard {
         this.board = board;
     }
 
+    public int getMoveColor(String move) {
+        try {
+//            System.out.println("debug 1");
+            BoardPosition position = new BoardPosition(move.substring(0, 2));
+//            System.out.println("debug 2");
+            ChessPiece piece = this.getPieceAt(position);
+            return piece.color;
+
+        }
+        catch (MoveFormatException e) {
+            return -1;
+        }
+    }
+
     public boolean validMove(ChessPiece piece, BoardPosition position) {
         ArrayList<BoardPosition> possibleMoves = piece.findPossibleMoves(this);
 

@@ -36,11 +36,15 @@ public class ChessGame {
         board.printBoard();
         System.out.println(currentTurnsPlayer.getName() + "\'s turn.\nPlease enter a move in this format [e2 e4]:");
         String move = scan.nextLine();
-        if (!board.movePiece(move)) {
-            turn();
+        // if the move is a valid move, and the piece being moved is the same as the current players move
+        if (board.getMoveColor(move) == currentTurnsPlayer.getColor() && board.movePiece(move)) {
+
+            currentTurnsPlayer = nextPlayer(currentTurnsPlayer);
         }
         else {
-            currentTurnsPlayer = nextPlayer(currentTurnsPlayer);
+            System.out.println(board.getMoveColor(move));
+            System.out.println("Invalid move, try again");
+            turn();
         }
     }
 
