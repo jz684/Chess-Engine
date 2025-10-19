@@ -7,9 +7,10 @@ public class ChessBoard {
     King whiteKing;
 
     public ChessBoard() {
-        blackKing = new King(new BoardPosition('e', 8), 0);
-        whiteKing = new King(new BoardPosition('e', 1), 1);
+        blackKing = new King(new BoardPosition('e', 8), 1);
+        whiteKing = new King(new BoardPosition('e', 1), 0);
         this.board = newBoard();
+        updateBoard();
     }
 
     public ChessBoard(ChessPiece[][] board) {
@@ -30,6 +31,17 @@ public class ChessBoard {
         }
     }
 
+    public boolean anyValidMoves(ChessPiece piece) {
+        ArrayList<BoardPosition> positions = piece.getPossibleMoves();
+        for (BoardPosition position : positions) {
+            if (validMove(piece, position) && !inCheck(piece, position)) {
+//                System.out.println(piece.getName() + " can move to " + positions.toString());
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean validMove(ChessPiece piece, BoardPosition position) {
         ArrayList<BoardPosition> possibleMoves = piece.findPossibleMoves(this);
 
@@ -47,22 +59,31 @@ public class ChessBoard {
 
             for (int c = 0; c <board[0].length; c++) {
 
-                if (board[r][c] != null && board[r][c].color == king.color) {
+                if (board[r][c] != null && board[r][c].color != king.color) {
 
 //                    System.out.println(board[r][c].getName());
 //                    System.out.println(board[r][c].toString());
 //                    board[r][c].printPossibleMoves();
 //                    System.out.println(king.toString());
+//                    System.out.println("Checking " + board[r][c].getName());
                     ArrayList<BoardPosition> possibleMoves = board[r][c].getPossibleMoves();
+
+//                    board[r][c].printPossibleMoves();
+
+                    BoardPosition kingPosition = king;
+
                     for (BoardPosition move : possibleMoves) {
-                        if (move.equals(king)) {
+//                        System.out.println(move.toString() + kingPosition.toString());
+
+                        if (move.equals(kingPosition)) {
+//                            System.out.println("ABOUT TO RETURN");
                             return true;
                         }
                     }
                 }
             }
         }
-        System.out.println("In check inCheck(king)");
+//        System.out.println("In check inCheck(king)");
         return false;
     }
 
@@ -104,7 +125,7 @@ public class ChessBoard {
     }
 
     public boolean movePiece(String move) {
-        System.out.println(move);
+//        System.out.println(move);
         try {
             BoardPosition piecePosition;
             BoardPosition targetPosition;
@@ -217,7 +238,7 @@ public class ChessBoard {
                 new Knight(new BoardPosition('b', 8), 1),
                 new Bishop(new BoardPosition('c', 8), 1),
                 new Queen(new BoardPosition('d', 8), 1),
-                whiteKing,
+                blackKing,
                 new Bishop(new BoardPosition('f', 8), 1),
                 new Knight(new BoardPosition('g', 8), 1),
                 new Rook(new BoardPosition('h', 8), 1)};
@@ -244,7 +265,7 @@ public class ChessBoard {
                 new Knight(new BoardPosition('b', 1), 0),
                 new Bishop(new BoardPosition('c', 1), 0),
                 new Queen(new BoardPosition('d', 1), 0),
-                blackKing,
+                whiteKing,
                 new Bishop(new BoardPosition('f', 1), 0),
                 new Knight(new BoardPosition('g', 1), 0),
                 new Rook(new BoardPosition('h', 1), 0)};

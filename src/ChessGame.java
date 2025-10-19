@@ -27,9 +27,35 @@ public class ChessGame {
     }
 
     public void playGame() {
-        while (true) {
+        while (!checkMate(board.whiteKing) && !checkMate(board.blackKing)) {
             turn();
         }
+
+        if (checkMate(board.whiteKing)) {
+            win(board.blackKing);
+        }
+        else {
+            win(board.whiteKing);
+        }
+
+    }
+
+    public void win(King king) {
+        scan.close();
+        if (king.color == 0) {
+            System.out.println("White King Wins! (Player 1)");
+        }
+        else {
+            System.out.println("Black king Wins! (Player 2)");
+        }
+    }
+
+    public boolean checkMate(King king) {
+//        System.out.println(king.color + " : Color");
+//        System.out.println(board.inCheck(king));
+//        System.out.println(!board.anyValidMoves(king));
+        king.printPossibleMoves();
+        return board.inCheck(king) && !board.anyValidMoves(king);
     }
 
     public void turn() {
@@ -42,7 +68,7 @@ public class ChessGame {
             currentTurnsPlayer = nextPlayer(currentTurnsPlayer);
         }
         else {
-            System.out.println(board.getMoveColor(move));
+//            System.out.println(board.getMoveColor(move));
             System.out.println("Invalid move, try again");
             turn();
         }
