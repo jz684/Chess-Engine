@@ -21,7 +21,7 @@ public class ChessFrame extends JFrame {
 //    public MenuBar createMenu() {}
 
     public Image createLogo() {
-        String path = "images/chessImage.png";
+        String path = "src/images/chessIcon.png";
         ImageIcon icon = new ImageIcon(path);
         return icon.getImage();
     }

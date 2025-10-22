@@ -45,8 +45,9 @@ public class ChessDriver {
 //        System.out.println(board.inCheck(board.blackKing));
 
         ChessGame game = new ChessGame();
-        game.startGame();
+//        game.startGame();
 
+        new ChessFrame(new ChessPanel(), game);
 
     }
 
