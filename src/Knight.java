@@ -1,9 +1,21 @@
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Knight extends ChessPiece{
 
     public Knight(BoardPosition position, int color) {
         super(position, color);
+        super.setImage(findImage(color));
+    }
+
+    @Override
+    public ImageIcon findImage(int color) {
+        if (color == 0) {
+            return new ImageIcon("src/images/blackKnight.png");
+        }
+        else {
+            return new ImageIcon("src/images/whiteKnight.png");
+        }
     }
 
     @Override

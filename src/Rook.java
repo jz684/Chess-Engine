@@ -1,9 +1,21 @@
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Rook extends ChessPiece{
 
     public Rook(BoardPosition position, int color) {
         super(position, color);
+        super.setImage(findImage(color));
+    }
+
+    @Override
+    public ImageIcon findImage(int color) {
+        if (color == 0) {
+            return new ImageIcon("src/images/blackRook.png");
+        }
+        else {
+            return new ImageIcon("src/images/whiteRook.png");
+        }
     }
 
     @Override

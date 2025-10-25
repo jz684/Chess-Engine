@@ -5,15 +5,11 @@ public class King extends ChessPiece{
 
     public King(BoardPosition position, int color) {
         super(position, color);
+        super.setImage(findImage(color));
     }
 
     @Override
     public ImageIcon findImage(int color) {
-        return null;
-    }
-
-
-    public ImageIcon setImage(int color) {
         if (color == 0) {
             return new ImageIcon("src/images/blackKing.png");
         }

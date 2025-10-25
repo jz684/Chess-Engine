@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Pawn extends ChessPiece{
@@ -8,6 +9,17 @@ public class Pawn extends ChessPiece{
 
     public Pawn(BoardPosition position, int color) {
         super(position, color);
+        super.setImage(findImage(color));
+    }
+
+    @Override
+    public ImageIcon findImage(int color) {
+        if (color == 0) {
+            return new ImageIcon("src/images/blackPawn.png");
+        }
+        else {
+            return new ImageIcon("src/images/whitePawn.png");
+        }
     }
 
     @Override
