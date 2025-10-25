@@ -26,6 +26,10 @@ public class ChessGame {
         playGame();
     }
 
+    public ChessPiece[][] getBoard() {
+        return board.getBoard();
+    }
+
     public void playGame() {
         while (!checkMate(board.whiteKing) && !checkMate(board.blackKing)) {
             turn();

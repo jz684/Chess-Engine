@@ -10,7 +10,7 @@ public class Rook extends ChessPiece{
 
     @Override
     public ImageIcon findImage(int color) {
-        if (color == 0) {
+        if (color == 1) {
             return new ImageIcon("src/images/blackRook.png");
         }
         else {

@@ -14,7 +14,7 @@ public class Pawn extends ChessPiece{
 
     @Override
     public ImageIcon findImage(int color) {
-        if (color == 0) {
+        if (color == 1) {
             return new ImageIcon("src/images/blackPawn.png");
         }
         else {

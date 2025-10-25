@@ -1,10 +1,21 @@
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Bishop extends ChessPiece{
 
     public Bishop(BoardPosition position, int color) {
         super(position, color);
+        super.setImage(findImage(color));
+    }
 
+    @Override
+    public ImageIcon findImage(int color) {
+        if (color == 1) {
+            return new ImageIcon("src/images/blackBishop.png");
+        }
+        else {
+            return new ImageIcon("src/images/whiteBishop.png");
+        }
     }
 
     public ArrayList<BoardPosition> findPossibleMoves(ChessBoard board) {

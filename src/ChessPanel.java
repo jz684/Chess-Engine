@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ChessPanel extends JPanel {
 
@@ -7,12 +9,57 @@ public class ChessPanel extends JPanel {
 
     private static int SCREEN_WIDTH = 600;
     private static int SCREEN_HEIGHT = 600;
+    private static int SQUARE_LENGTH = 75;
+
+    private boolean running;
 
     public ChessPanel() {
         this.setLayout(null);
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         chessGame = new ChessGame();
-//        start();
+        running = true;
+        start();
+    }
+
+    public BoardPosition coordsToPosition(int x, int y) {
+        x = x / 75;
+        y = Math.abs(y - 675); // Calculation to get normalized board layout
+        int column = y / 75;
+
+        char row = (char) (x + 97);
+        System.out.println(new BoardPosition(row, column));
+        return new BoardPosition(row, column);
+    }
+
+    public void drawPieces() {
+        ChessPiece[][] board = chessGame.getBoard();
+
+        for (int r = 0; r < SCREEN_HEIGHT / SQUARE_LENGTH; r++) {
+            for (int c = 0; c < SCREEN_WIDTH / SQUARE_LENGTH; c++) {
+                if (board[r][c] != null) {
+//                    System.out.println(board[r][c].getName());
+                    Image image = board[r][c].pieceIcon.getImage();
+                    ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH)); // Resize
+                    JLabel testImg = new JLabel(imageIcon);
+                    testImg.setVisible(true);
+                    testImg.setBounds(c * SQUARE_LENGTH,r * SQUARE_LENGTH, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+                    this.add(testImg);
+                }
+            }
+        }
+
+
+    }
+
+    public void listenForMove() {
+        this.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+//                System.out.println(e.getX() + ", " + e.getY());
+                coordsToPosition(e.getX(), e.getY());
+            }
+        });
     }
 
     public void drawBoard(Graphics g) {
@@ -22,9 +69,7 @@ public class ChessPanel extends JPanel {
         Color whiteSquare = new Color(255, 238, 176);
         Color blackSquare = new Color(128, 81, 37);
 
-        int squareLength = SCREEN_WIDTH / 8; // 75
-
-        for (int r = 0; r < SCREEN_HEIGHT / squareLength; r++) {
+        for (int r = 0; r < SCREEN_HEIGHT / SQUARE_LENGTH; r++) {
             currentX = 0;
             if (r % 2 == 0) {
                 g.setColor(whiteSquare);
@@ -32,7 +77,7 @@ public class ChessPanel extends JPanel {
             else {
                 g.setColor(blackSquare);
             }
-            for (int c = 0; c < SCREEN_WIDTH / squareLength; c++) {
+            for (int c = 0; c < SCREEN_WIDTH / SQUARE_LENGTH; c++) {
                 if (c != 0) {
                     if (g.getColor().equals(whiteSquare)) {
                         g.setColor(blackSquare);
@@ -41,10 +86,10 @@ public class ChessPanel extends JPanel {
                         g.setColor(whiteSquare);
                     }
                 }
-                g.fillRect(currentX, currentY, squareLength, squareLength);
-                currentX += squareLength;
+                g.fillRect(currentX, currentY, SQUARE_LENGTH, SQUARE_LENGTH);
+                currentX += SQUARE_LENGTH;
             }
-            currentY += squareLength;
+            currentY += SQUARE_LENGTH;
         }
 //        paintComponent(g);
     }
@@ -52,6 +97,7 @@ public class ChessPanel extends JPanel {
     public void start() {
 //        chessGame.startGame();
 //        drawBoard();
+        listenForMove();
         repaint();
     }
 
@@ -61,6 +107,9 @@ public class ChessPanel extends JPanel {
     }
 
     public void draw(Graphics g) {
-        drawBoard(g);
+        if (running) {
+            drawBoard(g);
+            drawPieces();
+        }
     }
 }
