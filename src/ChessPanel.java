@@ -54,10 +54,47 @@ public class ChessPanel extends JPanel {
     public void listenForMove() {
         this.addMouseListener(new MouseAdapter() {
 
+            private boolean pressed;
+            private BoardPosition pressedOn = null;
+
+            private BoardPosition firstPosition;
+
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+////                System.out.println(e.getX() + ", " + e.getY());
+//                coordsToPosition(e.getX(), e.getY());
+//            }
+
             @Override
-            public void mouseClicked(MouseEvent e) {
-//                System.out.println(e.getX() + ", " + e.getY());
-                coordsToPosition(e.getX(), e.getY());
+            public void mousePressed(MouseEvent e) {
+                pressed = true;
+                pressedOn = coordsToPosition(e.getX(), e.getY());
+                System.out.println("Pressed on: " + pressedOn);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (pressed) {
+                    pressed = false;
+                    BoardPosition releasedOn = coordsToPosition(e.getX(), e.getY());
+                    System.out.println("Released on: " + releasedOn);
+                    if (!pressedOn.equals(releasedOn)) {
+                        System.out.println(pressedOn + " to " + releasedOn);
+                        pressedOn = null;
+                        firstPosition = null;
+                    }
+                    else if (firstPosition != null && !firstPosition.equals(releasedOn)) {
+                        System.out.println(firstPosition + " to " + releasedOn);
+                        pressedOn = null;
+                        firstPosition = null;
+                    }
+                    else {
+                        firstPosition = pressedOn;
+                        pressedOn = null;
+                    }
+
+
+                }
             }
         });
     }
