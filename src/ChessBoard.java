@@ -21,6 +21,10 @@ public class ChessBoard {
         this.board = board;
     }
 
+    public int getMoveColor(BoardPosition position) {
+        return this.getPieceAt(position).color;
+    }
+
     public int getMoveColor(String move) {
         try {
 //            System.out.println("debug 1");

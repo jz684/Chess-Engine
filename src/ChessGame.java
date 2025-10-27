@@ -62,6 +62,20 @@ public class ChessGame {
         return board.inCheck(king) && !board.anyValidMoves(king);
     }
 
+    public void printBoard() {
+        board.printBoard();
+    }
+
+    public void turn(BoardPosition position, BoardPosition move) {
+        if (board.getMoveColor(position) == currentTurnsPlayer.getColor() && board.movePiece(position, move)) {
+
+            currentTurnsPlayer = nextPlayer(currentTurnsPlayer);
+        }
+        else {
+            System.out.println("Invalid Move");
+        }
+    }
+
     public void turn() {
         board.printBoard();
         System.out.println(currentTurnsPlayer.getName() + "\'s turn.\nPlease enter a move in this format [e2 e4]:");
