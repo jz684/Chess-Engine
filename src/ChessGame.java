@@ -58,6 +58,7 @@ public class ChessGame {
 //        System.out.println(king.color + " : Color");
 //        System.out.println(board.inCheck(king));
 //        System.out.println(!board.anyValidMoves(king));
+        System.out.print("King possibleMoves: ");
         king.printPossibleMoves();
         return board.inCheck(king) && !board.anyValidMoves(king);
     }
@@ -72,6 +73,9 @@ public class ChessGame {
             currentTurnsPlayer = nextPlayer(currentTurnsPlayer);
         }
         else {
+            if (board.getMoveColor(position) != currentTurnsPlayer.getColor()) {
+                System.out.println("Not ur turn buddy");
+            }
             System.out.println("Invalid Move");
         }
     }

@@ -22,6 +22,8 @@ public class ChessBoard {
     }
 
     public int getMoveColor(BoardPosition position) {
+        if (position == null || this.getPieceAt(position) == null)
+            return -1;
         return this.getPieceAt(position).color;
     }
 
