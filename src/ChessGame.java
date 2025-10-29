@@ -3,6 +3,7 @@ import java.util.Timer;
 
 
 // Dear Jackson, Your code is ass and needs fixing Immediately.
+// Heard you loud and clear Lee, Will start immediately.
 
 public class ChessGame {
     private ChessBoard board;
