@@ -1,6 +1,9 @@
 import java.util.Scanner;
 import java.util.Timer;
 
+
+// Dear Jackson, Your code is ass and needs fixing Immediately.
+
 public class ChessGame {
     private ChessBoard board;
     private Timer timer;
