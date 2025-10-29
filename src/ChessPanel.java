@@ -145,6 +145,33 @@ public class ChessPanel extends JPanel {
         repaint();
     }
 
+    // TODO
+    public void winScreen(King king) {
+        String color;
+        if (king.color == 0)
+            color = "White";
+        else
+            color = "Black";
+        JLabel winText = new JLabel(color + " King Wins!");
+        winText.setBounds(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+        winText.setVisible(true);
+    }
+
+    public void checkForMate() {
+        if (chessGame.checkMate(chessGame.getChessBoard().whiteKing)) {
+            System.out.println("Black Wins!");
+            running = false;
+            repaint();
+            winScreen(chessGame.getChessBoard().whiteKing);
+        }
+        else if (chessGame.checkMate(chessGame.getChessBoard().blackKing)) {
+            System.out.println("White wins!");
+            running = false;
+            repaint();
+            winScreen(chessGame.getChessBoard().blackKing);
+        }
+    }
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         draw(g);
@@ -156,6 +183,9 @@ public class ChessPanel extends JPanel {
             drawBoard(g);
             chessGame.printBoard();
             drawPieces();
+            checkForMate();
         }
+
+
     }
 }

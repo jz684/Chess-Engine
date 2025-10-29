@@ -26,6 +26,10 @@ public class ChessGame {
         playGame();
     }
 
+    public ChessBoard getChessBoard() {
+        return board;
+    }
+
     public ChessPiece[][] getBoard() {
         return board.getBoard();
     }
