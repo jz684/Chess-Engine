@@ -155,21 +155,24 @@ public class ChessPanel extends JPanel {
         JLabel winText = new JLabel(color + " King Wins!");
         winText.setBounds(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
         winText.setVisible(true);
+        this.add(winText);
     }
 
-    public void checkForMate() {
+    public King getWinner() {
         if (chessGame.checkMate(chessGame.getChessBoard().whiteKing)) {
-            System.out.println("Black Wins!");
-            running = false;
-            repaint();
-            winScreen(chessGame.getChessBoard().whiteKing);
+            return chessGame.getChessBoard().whiteKing;
         }
-        else if (chessGame.checkMate(chessGame.getChessBoard().blackKing)) {
-            System.out.println("White wins!");
-            running = false;
-            repaint();
-            winScreen(chessGame.getChessBoard().blackKing);
+        else {
+            return chessGame.getChessBoard().blackKing;
         }
+    }
+
+    public boolean checkForMate() {
+        if (chessGame.checkMate(chessGame.getChessBoard().whiteKing) || chessGame.checkMate(chessGame.getChessBoard().blackKing)) {
+            System.out.println("CheckMate");
+            return true;
+        }
+        return false;
     }
 
     public void paintComponent(Graphics g) {
@@ -178,12 +181,18 @@ public class ChessPanel extends JPanel {
     }
 
     public void draw(Graphics g) {
+        running = !checkForMate();
+
         if (running) {
             removeAll();
             drawBoard(g);
             chessGame.printBoard();
             drawPieces();
-            checkForMate();
+        }
+        else {
+            System.out.println("End running");
+            removeAll();
+            winScreen(getWinner());
         }
 
 
