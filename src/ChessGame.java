@@ -31,7 +31,7 @@ public class ChessGame {
         frame = new ChessFrame(panel);
     }
 
-    public void startGame() {
+    public void startGame() throws MoveFormatException {
         System.out.println("Welcome to Chess!\nWritten by Jackson Lee\n");
         playGame();
     }
@@ -44,9 +44,26 @@ public class ChessGame {
         return board.getBoard();
     }
 
-    public void playGame() {
-        while (stillRunning()) {
-            turn();
+    public void playGame() throws MoveFormatException {
+        panel.repaint();
+        panel.drawPieces(board);
+//        while (stillRunning() && currentTurnsPlayer == player1) {
+////            turn();
+//            System.out.println("Getting stuck");
+//            panel.waitingForMove(true);
+//            if (panel.getMyMove() != null) {
+//                turn(panel.getMyMove());
+//                panel.repaint();
+//                panel.drawPieces(board);
+//            }
+//        }
+        if (stillRunning() && currentTurnsPlayer.equals(player1)) {
+            panel.waitingForMove(true);
+            if (panel.getMyMove() != null) {
+                turn(panel.getMyMove());
+                panel.repaint();
+                panel.drawPieces(board);
+            }
         }
 
         if (checkMate(board.whiteKing)) {
@@ -105,6 +122,21 @@ public class ChessGame {
         board.printBoard();
     }
 
+    public void turn(String moveString) throws MoveFormatException {
+        BoardPosition position = new BoardPosition(moveString.substring(0, 2));
+        BoardPosition move = new BoardPosition(moveString.substring(3, 5));
+        if (board.getMoveColor(position) == currentTurnsPlayer.getColor() && board.movePiece(position, move)) {
+
+            currentTurnsPlayer = nextPlayer(currentTurnsPlayer);
+        }
+        else {
+            if (board.getMoveColor(position) != currentTurnsPlayer.getColor()) {
+                System.out.println("Not ur turn buddy");
+            }
+            System.out.println("Invalid Move");
+        }
+    }
+
     public void turn(BoardPosition position, BoardPosition move) {
         if (board.getMoveColor(position) == currentTurnsPlayer.getColor() && board.movePiece(position, move)) {
 
@@ -118,21 +150,21 @@ public class ChessGame {
         }
     }
 
-    public void turn() {
-        board.printBoard();
-        System.out.println(currentTurnsPlayer.getName() + "\'s turn.\nPlease enter a move in this format [e2 e4]:");
-        String move = scan.nextLine();
-        // if the move is a valid move, and the piece being moved is the same as the current players move
-        if (board.getMoveColor(move) == currentTurnsPlayer.getColor() && board.movePiece(move)) {
-
-            currentTurnsPlayer = nextPlayer(currentTurnsPlayer);
-        }
-        else {
-//            System.out.println(board.getMoveColor(move));
-            System.out.println("Invalid move, try again");
-            turn();
-        }
-    }
+//    public void turn() {
+//        board.printBoard();
+//        System.out.println(currentTurnsPlayer.getName() + "\'s turn.\nPlease enter a move in this format [e2 e4]:");
+//        String move = scan.nextLine();
+//        // if the move is a valid move, and the piece being moved is the same as the current players move
+//        if (board.getMoveColor(move) == currentTurnsPlayer.getColor() && board.movePiece(move)) {
+//
+//            currentTurnsPlayer = nextPlayer(currentTurnsPlayer);
+//        }
+//        else {
+////            System.out.println(board.getMoveColor(move));
+//            System.out.println("Invalid move, try again");
+//            turn();
+//        }
+//    }
 
     public Player nextPlayer(Player player) {
         // Returns the other player when one player is inputted.
@@ -144,5 +176,21 @@ public class ChessGame {
         }
     }
 
+    public King getWinner() {
+        if (checkMate(board.whiteKing)) {
+            return board.whiteKing;
+        }
+        else {
+            return board.blackKing;
+        }
+    }
+
+    public boolean checkForMate() {
+        if (checkMate(board.whiteKing) || checkMate(board.blackKing)) {
+            System.out.println("CheckMate");
+            return true;
+        }
+        return false;
+    }
 
 }

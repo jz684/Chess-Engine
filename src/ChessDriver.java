@@ -1,5 +1,5 @@
 public class ChessDriver {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MoveFormatException {
 //        ChessBoard board = new ChessBoard();
 //        board.newBoard();
 //        board.updateBoard();

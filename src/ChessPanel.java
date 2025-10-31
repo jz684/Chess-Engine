@@ -12,11 +12,21 @@ public class ChessPanel extends JPanel {
 
     private boolean waitingForMove;
 
+    private String myMove;
+
     public ChessPanel() {
         this.setLayout(null);
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         waitingForMove = false;
-        start();
+//        start();
+    }
+
+    public String getMyMove() {
+        return myMove;
+    }
+
+    public void setMyMove(String myMove) {
+        this.myMove = myMove;
     }
 
     /**
@@ -26,7 +36,12 @@ public class ChessPanel extends JPanel {
 
     }
 
-    public void setWaitingForMove(boolean waitingForMove) {
+//    public void notWaitingForMove() {
+//        this.waitingForMove = false;
+//        this.currentChessGame = null;
+//    }
+//
+    public void waitingForMove(boolean waitingForMove) {
         this.waitingForMove = waitingForMove;
     }
 
@@ -61,11 +76,18 @@ public class ChessPanel extends JPanel {
     }
 
     public void makeMove(BoardPosition position, BoardPosition move) {
-        if (waitingForMove) {
-            chessGame.turn(position, move);
-        }
+        myMove = position.toString() + " " + move.toString();
+        waitingForMove = false;
 
-        repaint();
+
+//        repaint();
+    }
+
+    public String waitForMove() {
+        while (myMove != null && waitingForMove) {
+            System.out.println("Waiting...");
+        }
+        return myMove;
     }
 
     public void listenForMove() {
@@ -165,22 +187,22 @@ public class ChessPanel extends JPanel {
         this.add(winText);
     }
 
-    public King getWinner() {
-        if (chessGame.checkMate(chessGame.getChessBoard().whiteKing)) {
-            return chessGame.getChessBoard().whiteKing;
-        }
-        else {
-            return chessGame.getChessBoard().blackKing;
-        }
-    }
+//    public King getWinner() {
+//        if (chessGame.checkMate(chessGame.getChessBoard().whiteKing)) {
+//            return chessGame.getChessBoard().whiteKing;
+//        }
+//        else {
+//            return chessGame.getChessBoard().blackKing;
+//        }
+//    }
 
-    public boolean checkForMate() {
-        if (chessGame.checkMate(chessGame.getChessBoard().whiteKing) || chessGame.checkMate(chessGame.getChessBoard().blackKing)) {
-            System.out.println("CheckMate");
-            return true;
-        }
-        return false;
-    }
+//    public boolean checkForMate() {
+//        if (chessGame.checkMate(chessGame.getChessBoard().whiteKing) || chessGame.checkMate(chessGame.getChessBoard().blackKing)) {
+//            System.out.println("CheckMate");
+//            return true;
+//        }
+//        return false;
+//    }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -188,19 +210,20 @@ public class ChessPanel extends JPanel {
     }
 
     public void draw(Graphics g) {
-        running = !checkForMate();
+        drawBoard(g);
+//        running = !checkForMate();
 
-        if (running) {
-            removeAll();
-            drawBoard(g);
-            chessGame.printBoard();
-            drawPieces();
-        }
-        else {
-            System.out.println("End running");
-            removeAll();
-            winScreen(getWinner());
-        }
+//        if (running) {
+//            removeAll();
+//            drawBoard(g);
+//            chessGame.printBoard();
+//            drawPieces();
+//        }
+//        else {
+//            System.out.println("End running");
+//            removeAll();
+//            winScreen(getWinner());
+//        }
 
 
     }
