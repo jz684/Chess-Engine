@@ -12,6 +12,9 @@ public class ChessGame {
     private Player player2;
     private Player currentTurnsPlayer;
 
+    private ChessFrame frame;
+    private ChessPanel panel;
+
     // Temp
     private Scanner scan;
 
@@ -23,6 +26,9 @@ public class ChessGame {
         player1 = new Player("Player 1", 0);
         player2 = new Player("Player 2", 1);
         currentTurnsPlayer = player1;
+
+        panel = new ChessPanel();
+        frame = new ChessFrame(panel);
     }
 
     public void startGame() {
@@ -39,17 +45,41 @@ public class ChessGame {
     }
 
     public void playGame() {
-        while (!checkMate(board.whiteKing) && !checkMate(board.blackKing)) {
+        while (stillRunning()) {
             turn();
         }
 
         if (checkMate(board.whiteKing)) {
             win(board.blackKing);
         }
-        else {
+        else if (checkMate(board.blackKing)){
             win(board.whiteKing);
         }
+        else {
+            draw();
+        }
+    }
 
+    public void draw() {
+        System.out.println("DRAW: you guys suck");
+    }
+
+    /**
+     * Check if there's no checkMate or stalemate
+     * @return if the game is still running.
+     */
+    public boolean stillRunning() {
+        return (!checkMate(board.whiteKing) && !checkMate(board.blackKing)) && (!staleMate(board.whiteKing) && !staleMate(board.blackKing));
+    }
+
+    /**
+     * To check if there's a stalemate
+     * @param king
+     * @return
+     */
+    public boolean staleMate(King king) {
+        // TODO
+        return false;
     }
 
     public void win(King king) {

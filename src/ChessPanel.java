@@ -5,20 +5,29 @@ import java.awt.event.MouseEvent;
 
 public class ChessPanel extends JPanel {
 
-    private ChessGame chessGame;
 
     private static int SCREEN_WIDTH = 600;
     private static int SCREEN_HEIGHT = 600;
     private static int SQUARE_LENGTH = 75;
 
-    private boolean running;
+    private boolean waitingForMove;
 
     public ChessPanel() {
         this.setLayout(null);
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        chessGame = new ChessGame();
-        running = true;
+        waitingForMove = false;
         start();
+    }
+
+    /**
+     * Update the chess panel to reflect the game in the game class.
+     */
+    public void updatePanel(ChessBoard chessBoard) {
+
+    }
+
+    public void setWaitingForMove(boolean waitingForMove) {
+        this.waitingForMove = waitingForMove;
     }
 
     public BoardPosition coordsToPosition(int x, int y) {
@@ -31,14 +40,14 @@ public class ChessPanel extends JPanel {
         return new BoardPosition(row, column);
     }
 
-    public void drawPieces() {
-        ChessPiece[][] board = chessGame.getBoard();
+    public void drawPieces(ChessBoard board) {
+        ChessPiece[][] boardArray = board.getBoard();
 
         for (int r = 0; r < SCREEN_HEIGHT / SQUARE_LENGTH; r++) {
             for (int c = 0; c < SCREEN_WIDTH / SQUARE_LENGTH; c++) {
-                if (board[r][c] != null) {
+                if (boardArray[r][c] != null) {
 //                    System.out.println(board[r][c].getName());
-                    Image image = board[r][c].pieceIcon.getImage();
+                    Image image = boardArray[r][c].pieceIcon.getImage();
                     ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH)); // Resize
                     JLabel testImg = new JLabel(imageIcon);
                     testImg.setVisible(true);
@@ -52,7 +61,10 @@ public class ChessPanel extends JPanel {
     }
 
     public void makeMove(BoardPosition position, BoardPosition move) {
-        chessGame.turn(position, move);
+        if (waitingForMove) {
+            chessGame.turn(position, move);
+        }
+
         repaint();
     }
 
@@ -64,11 +76,6 @@ public class ChessPanel extends JPanel {
 
             private BoardPosition firstPosition;
 
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-////                System.out.println(e.getX() + ", " + e.getY());
-//                coordsToPosition(e.getX(), e.getY());
-//            }
 
             @Override
             public void mousePressed(MouseEvent e) {

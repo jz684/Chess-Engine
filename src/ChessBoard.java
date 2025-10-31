@@ -6,6 +6,9 @@ public class ChessBoard {
     King blackKing;
     King whiteKing;
 
+    public ChessBoard(ChessPiece[][] board) {
+        this.board = board;
+    }
     public ChessBoard() {
         blackKing = new King(new BoardPosition('e', 8), 1);
         whiteKing = new King(new BoardPosition('e', 1), 0);
@@ -15,10 +18,6 @@ public class ChessBoard {
 
     public ChessPiece[][] getBoard() {
         return board;
-    }
-
-    public ChessBoard(ChessPiece[][] board) {
-        this.board = board;
     }
 
     public int getMoveColor(BoardPosition position) {
@@ -142,13 +141,7 @@ public class ChessBoard {
             if (move.length() != 5)
                 throw new MoveFormatException("Invalid length");
 
-//            char positionCol = move.charAt(0);
-//            int positionRow = move.charAt(1);
-
             piecePosition = new BoardPosition(move.substring(0, 2));
-
-//            positionCol = move.charAt(3);
-//            positionRow = move.charAt(4);
 
             targetPosition = new BoardPosition(move.substring(3,5));
 

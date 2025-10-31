@@ -47,7 +47,7 @@ public class ChessDriver {
         ChessGame game = new ChessGame();
 //        game.startGame();
 
-        new ChessFrame(new ChessPanel(), game);
+        game.startGame();
 
     }
 
