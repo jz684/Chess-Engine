@@ -3,9 +3,19 @@ import java.util.ArrayList;
 
 public class King extends ChessPiece{
 
+    private boolean hasMoved;
+
     public King(BoardPosition position, int color) {
         super(position, color);
         super.setImage(findImage(color));
+        this.hasMoved = false;
+    }
+
+    @Override
+    public void move(BoardPosition pos) {
+        super.move(pos);
+        if (!hasMoved)
+            hasMoved = true;
     }
 
     @Override

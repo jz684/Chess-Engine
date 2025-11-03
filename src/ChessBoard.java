@@ -63,6 +63,20 @@ public class ChessBoard {
         return false;
     }
 
+    public boolean canCastle(ChessPiece piece, BoardPosition move) {
+        if (piece.equals(whiteKing)) {
+            if (move.equals(new BoardPosition('a', 1)) || move.equals(new BoardPosition('b', 1)) || move.equals(new BoardPosition('c' , 1)))) {
+                // The king is castling kingside.
+            }
+            if (move.equals(new BoardPosition('g', 1)) || move.equals(new BoardPosition('h', 1)))) {
+                // The king is castling queenside.
+            }
+        }
+        else if (piece.equals(blackKing)) {
+
+        }
+    }
+
     // boolean inCheck(King k) is used for telling if you are in check at this moment
     public boolean inCheck(King king) {
         for (int r = 0; r < board.length; r++) {
