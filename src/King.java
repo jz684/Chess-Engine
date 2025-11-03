@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class King extends ChessPiece{
 
-    private boolean hasMoved;
+    boolean hasMoved;
 
     public King(BoardPosition position, int color) {
         super(position, color);
@@ -57,7 +57,6 @@ public class King extends ChessPiece{
 
         return possibleMoves;
     }
-
 
     @Override
     public String getName() {

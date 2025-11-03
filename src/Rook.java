@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Rook extends ChessPiece{
 
-    private boolean hasMoved;
+    boolean hasMoved;
 
     public Rook(BoardPosition position, int color) {
         super(position, color);

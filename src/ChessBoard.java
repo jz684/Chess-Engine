@@ -63,11 +63,15 @@ public class ChessBoard {
     }
 
     public boolean canCastle(ChessPiece piece, BoardPosition move) {
+        ChessPiece castlingRook;
         if (piece.equals(whiteKing)) {
-            if (move.equals(new BoardPosition('a', 1)) || move.equals(new BoardPosition('b', 1)) || move.equals(new BoardPosition('c' , 1)))) {
+            if (getPieceAt(new BoardPosition('a', 1)) != null && (move.equals(new BoardPosition('a', 1)) || move.equals(new BoardPosition('b', 1))
+                    || move.equals(new BoardPosition('c' , 1)) && getPieceAt(new BoardPosition('a', 1)).getName().equals(" Rook: 0 "))) {
                 // The king is castling kingside.
+                castlingRook = getPieceAt(new BoardPosition('a', 1));
+//                if (!whiteKing.hasMoved && castlingRook.hasMoved)
             }
-            if (move.equals(new BoardPosition('g', 1)) || move.equals(new BoardPosition('h', 1)))) {
+            if (move.equals(new BoardPosition('g', 1)) || move.equals(new BoardPosition('h', 1))) {
                 // The king is castling queenside.
             }
         }
