@@ -17,6 +17,7 @@ public class BoardPosition {
         this.row = position.row;
     }
 
+    // TODO REMOVE
     public BoardPosition(String positionStr) throws MoveFormatException {
         positionStr = testFormat(positionStr);
         this.column = positionStr.charAt(0);
@@ -24,10 +25,12 @@ public class BoardPosition {
     }
 
     //Inclusive
+    // TODO REMOVE
     public boolean validBounds(int tester, int lower, int upper) {
         return tester >= lower && tester <=upper;
     }
 
+    // TODO REMOVE
     public String testFormat(String positionStr) throws MoveFormatException{
         if (positionStr.length() != 2)
             throw new MoveFormatException("Invalid length");

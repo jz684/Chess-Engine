@@ -56,6 +56,12 @@ public class ChessPanel extends JPanel {
         repaint();
     }
 
+    public void makeMove(Move move) {
+        System.out.println(move.toString());
+        chessGame.turn(move);
+        repaint();
+    }
+
     public void listenForMove() {
         this.addMouseListener(new MouseAdapter() {
 
@@ -85,13 +91,13 @@ public class ChessPanel extends JPanel {
                     System.out.println("Released on: " + releasedOn);
                     if (!pressedOn.equals(releasedOn)) {
                         System.out.println(pressedOn + " to " + releasedOn);
-                        makeMove(pressedOn, releasedOn);
+                        makeMove(new Move(pressedOn, releasedOn));
                         pressedOn = null;
                         firstPosition = null;
                     }
                     else if (firstPosition != null && !firstPosition.equals(releasedOn)) {
                         System.out.println(firstPosition + " to " + releasedOn);
-                        makeMove(firstPosition, releasedOn);
+                        makeMove(new Move(firstPosition, releasedOn));
                         pressedOn = null;
                         firstPosition = null;
                     }
