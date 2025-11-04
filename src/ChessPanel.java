@@ -7,9 +7,9 @@ public class ChessPanel extends JPanel {
 
     private ChessGame chessGame;
 
-    private static int SCREEN_WIDTH = 600;
-    private static int SCREEN_HEIGHT = 600;
-    private static int SQUARE_LENGTH = 75;
+    private static final int SCREEN_WIDTH = 600;
+    private static final int SCREEN_HEIGHT = 600;
+    private static final int SQUARE_LENGTH = 75;
 
     private boolean running;
 
@@ -51,11 +51,6 @@ public class ChessPanel extends JPanel {
 
     }
 
-    public void makeMove(BoardPosition position, BoardPosition move) {
-        chessGame.turn(position, move);
-        repaint();
-    }
-
     public void makeMove(Move move) {
         System.out.println(move.toString());
         chessGame.turn(move);
@@ -69,12 +64,6 @@ public class ChessPanel extends JPanel {
             private BoardPosition pressedOn = null;
 
             private BoardPosition firstPosition;
-
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-////                System.out.println(e.getX() + ", " + e.getY());
-//                coordsToPosition(e.getX(), e.getY());
-//            }
 
             @Override
             public void mousePressed(MouseEvent e) {
