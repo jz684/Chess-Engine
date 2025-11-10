@@ -43,11 +43,14 @@ public class ChessDriver {
 //        board.movePiece(new BoardPosition('b', 8), new BoardPosition('d', 7));
 //        board.printBoard();
 //        System.out.println(board.inCheck(board.blackKing));
-
+        try {
         ChessGame game = new ChessGame();
-//        game.startGame();
+        game.startGame();
 
-        new ChessFrame(new ChessPanel(), game);
+        } catch (MoveFormatException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 

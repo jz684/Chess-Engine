@@ -13,10 +13,12 @@ public class ChessPanel extends JPanel {
 
     private boolean running;
 
-    public ChessPanel() {
+//    private ChessBoard chessBoard;
+
+    public ChessPanel(ChessGame chessGame) {
+        this.chessGame = chessGame;
         this.setLayout(null);
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        chessGame = new ChessGame();
         running = true;
         start();
     }
@@ -53,6 +55,7 @@ public class ChessPanel extends JPanel {
 
     public void makeMove(Move move) {
         System.out.println(move.toString());
+        // TODO
         chessGame.turn(move);
         repaint();
     }
@@ -143,6 +146,7 @@ public class ChessPanel extends JPanel {
     // TODO
     public void winScreen(King king) {
         String color;
+        System.out.println("Winner :" + king.toString() + " " + king.color);
         if (king.color == 0)
             color = "White";
         else
@@ -155,10 +159,10 @@ public class ChessPanel extends JPanel {
 
     public King getWinner() {
         if (chessGame.checkMate(chessGame.getChessBoard().whiteKing)) {
-            return chessGame.getChessBoard().whiteKing;
+            return chessGame.getChessBoard().blackKing;
         }
         else {
-            return chessGame.getChessBoard().blackKing;
+            return chessGame.getChessBoard().whiteKing;
         }
     }
 
@@ -187,6 +191,7 @@ public class ChessPanel extends JPanel {
         else {
             System.out.println("End running");
             removeAll();
+            System.out.println("Winner is :" + getWinner().toString());
             winScreen(getWinner());
         }
 

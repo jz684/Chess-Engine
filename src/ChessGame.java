@@ -25,8 +25,9 @@ public class ChessGame {
     }
 
     public void startGame() throws MoveFormatException {
-        System.out.println("Welcome to Chess!\nWritten by Jackson Lee\n");
-        playGame();
+        ChessPanel panel = new ChessPanel(this);
+        ChessFrame frame = new ChessFrame(panel);
+        panel.start();
     }
 
     public ChessBoard getChessBoard() {
@@ -62,9 +63,6 @@ public class ChessGame {
     }
 
     public boolean checkMate(King king) {
-//        System.out.println(king.color + " : Color");
-//        System.out.println(board.inCheck(king));
-//        System.out.println(!board.anyValidMoves(king));
         System.out.print("King possibleMoves: ");
         king.printPossibleMoves();
         return board.inCheck(king) && !board.anyValidMoves(king);
@@ -100,6 +98,7 @@ public class ChessGame {
         }
     }
 
+    //TODO delete
     public void turn() throws MoveFormatException {
         board.printBoard();
         System.out.println(currentTurnsPlayer.getName() + "\'s turn.\nPlease enter a move in this format [e2 e4]:");
