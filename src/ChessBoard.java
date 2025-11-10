@@ -27,24 +27,18 @@ public class ChessBoard {
         return this.getPieceAt(position).color;
     }
 
-    public int getMoveColor(String move) {
-        try {
-//            System.out.println("debug 1");
-            BoardPosition position = new BoardPosition(move.substring(0, 2));
-//            System.out.println("debug 2");
-            ChessPiece piece = this.getPieceAt(position);
-            return piece.color;
-
-        }
-        catch (MoveFormatException e) {
+    public int getMoveColor(Move move) {
+        BoardPosition position = move.getInitPosition();
+        if (position == null || this.getPieceAt(position) == null)
             return -1;
-        }
+        return this.getPieceAt(position).color;
     }
 
     public boolean anyValidMoves(ChessPiece piece) {
         ArrayList<BoardPosition> positions = piece.getPossibleMoves();
         for (BoardPosition position : positions) {
-            if (validMove(piece, position) && !inCheck(piece, position)) {
+            Move move = new Move(piece, position);
+            if (validMove(move) && !inCheck(move)) {
 //                System.out.println(piece.getName() + " can move to " + positions.toString());
                 return true;
             }
@@ -52,30 +46,18 @@ public class ChessBoard {
         return false;
     }
 
-    public boolean validMove(ChessPiece piece, BoardPosition position) {
+    public boolean validMove(Move move) {
+        ChessPiece piece = getPieceAt(move.getInitPosition());
         ArrayList<BoardPosition> possibleMoves = piece.findPossibleMoves(this);
 
-        for (BoardPosition move : possibleMoves) {
-            if (move.equals(position)) {
+        for (BoardPosition possibleMove : possibleMoves) {
+            if (possibleMove.equals(move.getMovePosition())) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean canCastle(ChessPiece piece, BoardPosition move) {
-        if (piece.equals(whiteKing)) {
-            if (move.equals(new BoardPosition('a', 1)) || move.equals(new BoardPosition('b', 1)) || move.equals(new BoardPosition('c' , 1)))) {
-                // The king is castling kingside.
-            }
-            if (move.equals(new BoardPosition('g', 1)) || move.equals(new BoardPosition('h', 1)))) {
-                // The king is castling queenside.
-            }
-        }
-        else if (piece.equals(blackKing)) {
-
-        }
-    }
 
     // boolean inCheck(King k) is used for telling if you are in check at this moment
     public boolean inCheck(King king) {
@@ -112,22 +94,22 @@ public class ChessBoard {
     }
 
     // boolean inChecking(ChessPiece p, BoardPosition pos) is used for if moving will put you in check.
-    public boolean inCheck(ChessPiece piece, BoardPosition position) {
+    public boolean inCheck(Move move) {
         // Index through every piece on the board that isn't yours. if one of their possible moves
 
         // A temp board to test if this move would put my king in check.
         ChessBoard testBoard = this;
         ChessPiece[][] board = testBoard.board;
-        King king = findKing(piece);
+        King king = findKing(getPieceAt(move.getInitPosition()));
 
-        testBoard.tryMovePiece(piece, position);
+        testBoard.tryMovePiece(move);
 
         for (int r = 0; r < board.length; r++) {
             for (int c = 0; c <board[0].length; c++) {
                 if (board[r][c] != null) {
                     ArrayList<BoardPosition> possibleMoves = board[r][c].getPossibleMoves();
-                    for (BoardPosition move : possibleMoves) {
-                        if (move.equals(king)) {
+                    for (BoardPosition possibleMove : possibleMoves) {
+                        if (possibleMove.equals(king)) {
                             return true;
                         }
                     }
@@ -148,55 +130,35 @@ public class ChessBoard {
             return blackKing;
     }
 
-    public boolean movePiece(String move) {
-//        System.out.println(move);
-        try {
-            BoardPosition piecePosition;
-            BoardPosition targetPosition;
-            if (move.length() != 5)
-                throw new MoveFormatException("Invalid length");
-
-//            char positionCol = move.charAt(0);
-//            int positionRow = move.charAt(1);
-
-            piecePosition = new BoardPosition(move.substring(0, 2));
-
-//            positionCol = move.charAt(3);
-//            positionRow = move.charAt(4);
-
-            targetPosition = new BoardPosition(move.substring(3,5));
-
-            return movePiece(piecePosition, targetPosition);
-        }
-        catch (MoveFormatException e) {
-            System.out.println("Invalid move");
-            return false;
-        }
-    }
-
     // returns if the move was successful
     public boolean movePiece(BoardPosition piecePosition, BoardPosition targetPosition) {
         return movePiece(getPieceAt(piecePosition), targetPosition);
     }
 
-    public void tryMovePiece(ChessPiece piece, BoardPosition position) {
+    public void tryMovePiece(Move move) {
 
         // if it is a valid move and the king is not in check.
-//            System.out.println("Twas a valid move");
+    //            System.out.println("Twas a valid move");
+        ChessPiece piece = getPieceAt(move.getInitPosition());
         board[Math.abs(piece.row - 8)][piece.column - 97] = null;
-        board[Math.abs(position.row - 8)][position.column - 97] = piece;
+        board[Math.abs(move.getMovePosition().row - 8)][move.getMovePosition().column - 97] = piece;
 
-        piece.move(position);
+        piece.move(move.getMovePosition());
         updateBoard();
 
     }
 
-    public boolean movePiece(ChessPiece piece, BoardPosition position) {
+    public boolean movePiece(Move move) {
+//        System.out.println(move.getMovePosition());
+
+        ChessPiece piece = getPieceAt(move.getInitPosition());
+        BoardPosition position = move.getMovePosition();
+
 
         // if it is a valid move and the king is not in check.
 //            System.out.println("Twas a valid move");
-        if (validMove(piece, position)){
-            if (!inCheck(piece, position)){
+        if (validMove(move)){
+            if (!inCheck(move)){
                 board[Math.abs(piece.row - 8)][piece.column - 97] = null;
                 board[Math.abs(position.row - 8)][position.column - 97] = piece;
 
@@ -216,10 +178,17 @@ public class ChessBoard {
         return false;
     }
 
+    /**
+     * @param position Position being checked
+     * @return the chess piece at said position
+     */
     public ChessPiece getPieceAt(BoardPosition position) {
         return board[Math.abs(position.row - 8)][position.column - 97];
     }
 
+    /**
+     * Updates the board by indexing through the 2D array and initializing ever Chess piece
+     */
     public void updateBoard() {
         for (int r = 0; r < board.length; r++) {
             for (int c = 0; c < board[0].length; c++) {
@@ -230,6 +199,11 @@ public class ChessBoard {
         }
     }
 
+    /**
+     * checks if the position given is empty or occupied
+     * @param position the position being checked
+     * @return true if empty, false if not or null
+     */
     public boolean isEmpty(BoardPosition position) {
         try {
             return board[Math.abs(position.row - 8)][position.column - 97] == null &&
@@ -242,6 +216,9 @@ public class ChessBoard {
 
     }
 
+    /**
+     * For debugging, goes through ever piece on the board and prints it out to the terminal
+     */
     public void printBoard() {
         for (ChessPiece[] pieces : board) {
             for (ChessPiece piece : pieces) {
@@ -256,6 +233,10 @@ public class ChessBoard {
         }
     }
 
+    /**
+     * Creates a new set-up 2D array of ChessPieces
+     * @return a new board
+     */
     public ChessPiece[][] newBoard() {
         ChessPiece[][] board = new ChessPiece[8][8];
         board[0] = new ChessPiece[]{new Rook(new BoardPosition('a', 8), 1),

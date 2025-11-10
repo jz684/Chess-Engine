@@ -3,10 +3,8 @@ import java.awt.*;
 
 public class ChessFrame extends JFrame {
 
-    private ChessGame chessGame;
 
-    public ChessFrame(ChessPanel chessPanel, ChessGame chessGame) {
-        this.chessGame = chessGame;
+    public ChessFrame(ChessPanel chessPanel) {
         this.add(chessPanel);
         this.setTitle("Chess");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -24,9 +24,10 @@ public class ChessGame {
         currentTurnsPlayer = player1;
     }
 
-    public void startGame() {
-        System.out.println("Welcome to Chess!\nWritten by Jackson Lee\n");
-        playGame();
+    public void startGame() throws MoveFormatException {
+        ChessPanel panel = new ChessPanel(this);
+        ChessFrame frame = new ChessFrame(panel);
+        panel.start();
     }
 
     public ChessBoard getChessBoard() {
@@ -37,7 +38,7 @@ public class ChessGame {
         return board.getBoard();
     }
 
-    public void playGame() {
+    public void playGame() throws MoveFormatException {
         while (!checkMate(board.whiteKing) && !checkMate(board.blackKing)) {
             turn();
         }
@@ -62,9 +63,6 @@ public class ChessGame {
     }
 
     public boolean checkMate(King king) {
-//        System.out.println(king.color + " : Color");
-//        System.out.println(board.inCheck(king));
-//        System.out.println(!board.anyValidMoves(king));
         System.out.print("King possibleMoves: ");
         king.printPossibleMoves();
         return board.inCheck(king) && !board.anyValidMoves(king);
@@ -87,10 +85,25 @@ public class ChessGame {
         }
     }
 
-    public void turn() {
+    public void turn(Move move) {
+        if (board.getMoveColor(move) == currentTurnsPlayer.getColor() && board.movePiece(move)) {
+
+            currentTurnsPlayer = nextPlayer(currentTurnsPlayer);
+        }
+        else {
+            if (board.getMoveColor(move) != currentTurnsPlayer.getColor()) {
+                System.out.println("Not ur turn buddy");
+            }
+            System.out.println("Invalid Move");
+        }
+    }
+
+    //TODO delete
+    public void turn() throws MoveFormatException {
         board.printBoard();
         System.out.println(currentTurnsPlayer.getName() + "\'s turn.\nPlease enter a move in this format [e2 e4]:");
-        String move = scan.nextLine();
+        String moveString = scan.nextLine();
+        Move move = new Move(moveString);
         // if the move is a valid move, and the piece being moved is the same as the current players move
         if (board.getMoveColor(move) == currentTurnsPlayer.getColor() && board.movePiece(move)) {
 

@@ -7,16 +7,18 @@ public class ChessPanel extends JPanel {
 
     private ChessGame chessGame;
 
-    private static int SCREEN_WIDTH = 600;
-    private static int SCREEN_HEIGHT = 600;
-    private static int SQUARE_LENGTH = 75;
+    private static final int SCREEN_WIDTH = 600;
+    private static final int SCREEN_HEIGHT = 600;
+    private static final int SQUARE_LENGTH = 75;
 
     private boolean running;
 
-    public ChessPanel() {
+//    private ChessBoard chessBoard;
+
+    public ChessPanel(ChessGame chessGame) {
+        this.chessGame = chessGame;
         this.setLayout(null);
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-        chessGame = new ChessGame();
         running = true;
         start();
     }
@@ -51,8 +53,10 @@ public class ChessPanel extends JPanel {
 
     }
 
-    public void makeMove(BoardPosition position, BoardPosition move) {
-        chessGame.turn(position, move);
+    public void makeMove(Move move) {
+        System.out.println(move.toString());
+        // TODO
+        chessGame.turn(move);
         repaint();
     }
 
@@ -63,12 +67,6 @@ public class ChessPanel extends JPanel {
             private BoardPosition pressedOn = null;
 
             private BoardPosition firstPosition;
-
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-////                System.out.println(e.getX() + ", " + e.getY());
-//                coordsToPosition(e.getX(), e.getY());
-//            }
 
             @Override
             public void mousePressed(MouseEvent e) {
@@ -85,13 +83,13 @@ public class ChessPanel extends JPanel {
                     System.out.println("Released on: " + releasedOn);
                     if (!pressedOn.equals(releasedOn)) {
                         System.out.println(pressedOn + " to " + releasedOn);
-                        makeMove(pressedOn, releasedOn);
+                        makeMove(new Move(pressedOn, releasedOn));
                         pressedOn = null;
                         firstPosition = null;
                     }
                     else if (firstPosition != null && !firstPosition.equals(releasedOn)) {
                         System.out.println(firstPosition + " to " + releasedOn);
-                        makeMove(firstPosition, releasedOn);
+                        makeMove(new Move(firstPosition, releasedOn));
                         pressedOn = null;
                         firstPosition = null;
                     }
@@ -148,6 +146,7 @@ public class ChessPanel extends JPanel {
     // TODO
     public void winScreen(King king) {
         String color;
+        System.out.println("Winner :" + king.toString() + " " + king.color);
         if (king.color == 0)
             color = "White";
         else
@@ -160,10 +159,10 @@ public class ChessPanel extends JPanel {
 
     public King getWinner() {
         if (chessGame.checkMate(chessGame.getChessBoard().whiteKing)) {
-            return chessGame.getChessBoard().whiteKing;
+            return chessGame.getChessBoard().blackKing;
         }
         else {
-            return chessGame.getChessBoard().blackKing;
+            return chessGame.getChessBoard().whiteKing;
         }
     }
 
@@ -192,6 +191,7 @@ public class ChessPanel extends JPanel {
         else {
             System.out.println("End running");
             removeAll();
+            System.out.println("Winner is :" + getWinner().toString());
             winScreen(getWinner());
         }
 
