@@ -33,7 +33,7 @@ public class ChessDriver {
 //        board.printBoard();
 //        board.getPieceAt(new BoardPosition('b', 5)).printPossibleMoves();
 //        System.out.println();
-//        System.out.println(board.inCheck(board.blackKing));
+//        System.out.println(board.wouldPutInCheck(board.blackKing));
 //        board.movePiece(new BoardPosition('e', 7), new BoardPosition('e', 6));
 //        board.printBoard();
 //        board.getPieceAt(new BoardPosition('b', 5)).printPossibleMoves();
@@ -42,7 +42,7 @@ public class ChessDriver {
 //        System.out.println();
 //        board.movePiece(new BoardPosition('b', 8), new BoardPosition('d', 7));
 //        board.printBoard();
-//        System.out.println(board.inCheck(board.blackKing));
+//        System.out.println(board.wouldPutInCheck(board.blackKing));
         try {
         ChessGame game = new ChessGame();
         game.startGame();

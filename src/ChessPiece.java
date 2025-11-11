@@ -7,17 +7,27 @@ public abstract class ChessPiece extends BoardPosition{
     int color;
     ArrayList<BoardPosition> possibleMoves;
     ImageIcon pieceIcon;
+    boolean hasMoved;
 
     public ChessPiece() {
         super();
         this.color = 0;
         pieceIcon = null;
+        hasMoved = false;
     }
 
     public ChessPiece(BoardPosition position, int color) {
         super(position);
         this.color = color;
         pieceIcon = null;
+        hasMoved = false;
+    }
+
+    @Override
+    public void move(BoardPosition pos) {
+        super.move(pos);
+        if (!hasMoved)
+            hasMoved = true;
     }
 
     public void setImage(ImageIcon pieceIcon) {

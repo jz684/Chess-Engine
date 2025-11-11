@@ -38,7 +38,7 @@ public class ChessBoard {
         ArrayList<BoardPosition> positions = piece.getPossibleMoves();
         for (BoardPosition position : positions) {
             Move move = new Move(piece, position);
-            if (validMove(move) && !inCheck(move)) {
+            if (validMove(move) && !wouldPutInCheck(move)) {
 //                System.out.println(piece.getName() + " can move to " + positions.toString());
                 return true;
             }
@@ -55,6 +55,8 @@ public class ChessBoard {
                 return true;
             }
         }
+        System.out.print("Possible valid moves: ");
+        piece.printPossibleMoves();
         return false;
     }
 
@@ -89,12 +91,12 @@ public class ChessBoard {
                 }
             }
         }
-//        System.out.println("In check inCheck(king)");
+//        System.out.println("In check wouldPutInCheck(king)");
         return false;
     }
 
-    // boolean inChecking(ChessPiece p, BoardPosition pos) is used for if moving will put you in check.
-    public boolean inCheck(Move move) {
+    // boolean wouldPutInCheck(ChessPiece p, BoardPosition pos) is used for if moving will put you in check.
+    public boolean wouldPutInCheck(Move move) {
         // Index through every piece on the board that isn't yours. if one of their possible moves
 
         // A temp board to test if this move would put my king in check.
@@ -110,6 +112,7 @@ public class ChessBoard {
                     ArrayList<BoardPosition> possibleMoves = board[r][c].getPossibleMoves();
                     for (BoardPosition possibleMove : possibleMoves) {
                         if (possibleMove.equals(king)) {
+//                            System.out.println("That would put you in check!");
                             return true;
                         }
                     }
@@ -131,14 +134,13 @@ public class ChessBoard {
     }
 
     // returns if the move was successful
+    // TODO delete
     public boolean movePiece(BoardPosition piecePosition, BoardPosition targetPosition) {
         return movePiece(getPieceAt(piecePosition), targetPosition);
     }
 
     public void tryMovePiece(Move move) {
-
         // if it is a valid move and the king is not in check.
-    //            System.out.println("Twas a valid move");
         ChessPiece piece = getPieceAt(move.getInitPosition());
         board[Math.abs(piece.row - 8)][piece.column - 97] = null;
         board[Math.abs(move.getMovePosition().row - 8)][move.getMovePosition().column - 97] = piece;
@@ -146,6 +148,160 @@ public class ChessBoard {
         piece.move(move.getMovePosition());
         updateBoard();
 
+    }
+
+    /**
+     * clearToCastle
+     * Checks all the moves between two board positions, and makes sure if they're all empty and won't put the king in check.
+     * @return true if clear and empty, false if not.
+     */
+    public boolean clearToCastle(King king, ChessPiece rook) {
+        //Castling queen side
+        if (king.color == 0) {
+            if (rook.column < king.column) {
+                System.out.println("Castling queen side");
+                for (char i = (char) (king.column - 1); i > rook.column; i--) {
+                    if (!isEmpty(new BoardPosition(i, king.row)) || wouldPutInCheck(new Move(king, new BoardPosition(i, king.row)))) {
+                        System.out.println("Not clear to castle!");
+                        return false;
+                    }
+                }
+                return true;
+            }
+            //Castling king side
+            else if (rook.column > king.column) {
+                System.out.println("Castling king side");
+                for (char i = (char) (king.column + 1); i < rook.column; i++) {
+                    BoardPosition checkingPosition = new BoardPosition(i, king.row);
+                    System.out.println("Checking " + checkingPosition.toString());
+                    if (!isEmpty(new BoardPosition(i, king.row)) || wouldPutInCheck(new Move(king, new BoardPosition(i, king.row)))) {
+                        System.out.println("Not clear to castle!");
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        // King color == black
+        else {
+            if (rook.column > king.column) {
+                System.out.println("Castling queen side");
+                for (char i = (char) (king.column - 1); i > rook.column; i--) {
+                    if (!isEmpty(new BoardPosition(i, king.row)) || wouldPutInCheck(new Move(king, new BoardPosition(i, king.row)))) {
+                        System.out.println("Not clear to castle!");
+                        return false;
+                    }
+                }
+                return true;
+            }
+            //Castling king side
+            else if (rook.column < king.column) {
+                System.out.println("Castling king side");
+                for (char i = (char) (king.column + 1); i < rook.column; i++) {
+                    BoardPosition checkingPosition = new BoardPosition(i, king.row);
+                    System.out.println("Checking " + checkingPosition.toString());
+                    if (!isEmpty(new BoardPosition(i, king.row)) || wouldPutInCheck(new Move(king, new BoardPosition(i, king.row)))) {
+                        System.out.println("Not clear to castle!");
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean canCastle(Move move) {
+        BoardPosition movingTo = move.getMovePosition();
+        // If the piece is the white king.
+        if (getPieceAt(move.getInitPosition()).equals(whiteKing)) {
+            System.out.println("Castling White King");
+            // If its castling queenside
+            if (movingTo.equals(new BoardPosition('a', 1)) || movingTo.equals(new BoardPosition('b', 1)) || movingTo.equals(new BoardPosition('c' , 1))) {
+                // If neither pieces have moved
+                ChessPiece rook = getPieceAt(new BoardPosition('a', 1));
+                if ((rook != null && !rook.hasMoved) && (!whiteKing.hasMoved) && (clearToCastle(whiteKing, rook))) {
+                    // Castle
+                    //TODO make sure nothing is in check first and is empty
+                    board[Math.abs(whiteKing.row - 8)][whiteKing.column - 97] = null;
+                    board[7][2] = whiteKing;
+                    whiteKing.move(movingTo);
+
+                    board[Math.abs(rook.row - 8)][rook.column - 97] = null;
+                    board[7][3] = rook;
+                    rook.move(movingTo);
+                    updateBoard();
+                    return true;
+                }
+                System.out.println("Pieces have already moved");
+            }
+
+
+            // The king is castling queenside.
+            if (movingTo.equals(new BoardPosition('g', 1)) || movingTo.equals(new BoardPosition('h', 1))) {
+                // If neither pieces have moved
+                ChessPiece rook = getPieceAt(new BoardPosition('h', 1));
+                if ((rook != null && !rook.hasMoved) && (!whiteKing.hasMoved) && (clearToCastle(whiteKing, rook))) {
+                    // Castle
+                    //TODO make sure nothing is in check first and is empty
+                    board[Math.abs(whiteKing.row - 8)][whiteKing.column - 97] = null;
+                    board[7][6] = whiteKing;
+                    whiteKing.move(movingTo);
+
+                    board[Math.abs(rook.row - 8)][rook.column - 97] = null;
+                    board[7][5] = rook;
+                    rook.move(movingTo);
+                    updateBoard();
+                    return true;
+                }
+                System.out.println("Pieces have already moved");
+            }
+        }
+        else if (getPieceAt(move.getInitPosition()).equals(blackKing)) {
+            System.out.println("Castling Black King");
+            // If its castling queenside
+            if (movingTo.equals(new BoardPosition('a', 8)) || movingTo.equals(new BoardPosition('b', 8)) || movingTo.equals(new BoardPosition('c' , 8))) {
+                // If neither pieces have moved
+                ChessPiece rook = getPieceAt(new BoardPosition('a', 8));
+                if ((rook != null && !rook.hasMoved) && (!blackKing.hasMoved) && (clearToCastle(whiteKing, rook))) {
+                    // Castle
+                    //TODO make sure nothing is in check first and is empty
+                    board[Math.abs(blackKing.row - 8)][blackKing.column - 97] = null;
+                    board[0][2] = blackKing;
+                    whiteKing.move(movingTo);
+
+                    board[Math.abs(rook.row - 8)][rook.column - 97] = null;
+                    board[0][3] = rook;
+                    rook.move(movingTo);
+                    updateBoard();
+                    return true;
+                }
+                System.out.println("Pieces have already moved");
+            }
+
+
+            // The king is castling queenside.
+            if (movingTo.equals(new BoardPosition('g', 8)) || movingTo.equals(new BoardPosition('h', 8))) {
+                // If neither pieces have moved
+                ChessPiece rook = getPieceAt(new BoardPosition('h', 8));
+                if ((rook != null && !rook.hasMoved) && (!blackKing.hasMoved) && (clearToCastle(whiteKing, rook))) {
+                    // Castle
+                    //TODO make sure nothing is in check first and is empty
+                    board[Math.abs(blackKing.row - 8)][blackKing.column - 97] = null;
+                    board[0][6] = blackKing;
+                    blackKing.move(movingTo);
+
+                    board[Math.abs(rook.row - 8)][rook.column - 97] = null;
+                    board[0][5] = rook;
+                    rook.move(movingTo);
+                    updateBoard();
+                    return true;
+                }
+                System.out.println("Pieces have already moved");
+            }
+        }
+        return false;
     }
 
     public boolean movePiece(Move move) {
@@ -158,7 +314,7 @@ public class ChessBoard {
         // if it is a valid move and the king is not in check.
 //            System.out.println("Twas a valid move");
         if (validMove(move)){
-            if (!inCheck(move)){
+            if (!wouldPutInCheck(move)){
                 board[Math.abs(piece.row - 8)][piece.column - 97] = null;
                 board[Math.abs(position.row - 8)][position.column - 97] = piece;
 
@@ -174,6 +330,9 @@ public class ChessBoard {
         }
         else {
             System.out.println("Invalid Move!");
+        }
+        if (canCastle(move)) {
+            return true;
         }
         return false;
     }

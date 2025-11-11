@@ -3,19 +3,14 @@ import java.util.ArrayList;
 
 public class King extends ChessPiece{
 
-    private boolean hasMoved;
-
     public King(BoardPosition position, int color) {
         super(position, color);
         super.setImage(findImage(color));
-        this.hasMoved = false;
     }
 
     @Override
     public void move(BoardPosition pos) {
         super.move(pos);
-        if (!hasMoved)
-            hasMoved = true;
     }
 
     @Override
@@ -39,8 +34,8 @@ public class King extends ChessPiece{
 
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 3; c++) {
-                testPosition = new BoardPosition((char) (currentPosition.column - 1 + c), currentPosition.row - 1 + r);
-                if (r != 1 && c != 1) {
+                testPosition = new BoardPosition((char) (currentPosition.column - 1 + c), currentPosition.row + 1 + r);
+                if (r != 1 || c != 1) {
                     if (testPosition.isNotOutOfBounds() && board.isEmpty(testPosition)) {
 //                        System.out.println(color + ": Board is empty at: " + testPosition.toString());
                         possibleMoves.add(testPosition);
