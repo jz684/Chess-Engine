@@ -45,39 +45,40 @@ public class Rook extends ChessPiece{
 
         index = 1;
         // Rightward
-        testPosition = new BoardPosition(currentPosition.column, currentPosition.row + index);
+        testPosition = new BoardPosition((char) (currentPosition.column + index), currentPosition.row);
         while (board.isEmpty(testPosition)) {
             possibleMoves.add(testPosition);
             index++;
-            testPosition = new BoardPosition(currentPosition.column, currentPosition.row + index);
+            testPosition = new BoardPosition((char) (currentPosition.column + index), currentPosition.row);
         }
-        testPosition = new BoardPosition(currentPosition.column, currentPosition.row + index);
+        testPosition = new BoardPosition((char) (currentPosition.column + index), currentPosition.row);
         if (testPosition.isNotOutOfBounds() && !board.isEmpty(testPosition) && board.getPieceAt(testPosition).color != this.color) {
             possibleMoves.add(testPosition);
         }
 
         index = 1;
         // Backward
-        testPosition = new BoardPosition(currentPosition.column, currentPosition.row + index);
+        testPosition = new BoardPosition(currentPosition.column, currentPosition.row - index);
         while (board.isEmpty(testPosition)) {
             possibleMoves.add(testPosition);
+            System.out.println(testPosition.toString());
             index++;
-            testPosition = new BoardPosition(currentPosition.column, currentPosition.row + index);
+            testPosition = new BoardPosition(currentPosition.column, currentPosition.row - index);
         }
-        testPosition = new BoardPosition(currentPosition.column, currentPosition.row + index);
+        testPosition = new BoardPosition(currentPosition.column, currentPosition.row - index);
         if (testPosition.isNotOutOfBounds() && !board.isEmpty(testPosition) && board.getPieceAt(testPosition).color != this.color) {
             possibleMoves.add(testPosition);
         }
 
         index = 1;
         // Leftward
-        testPosition = new BoardPosition(currentPosition.column, currentPosition.row + index);
+        testPosition = new BoardPosition((char) (currentPosition.column - index), currentPosition.row);
         while (board.isEmpty(testPosition)) {
             possibleMoves.add(testPosition);
             index++;
-            testPosition = new BoardPosition(currentPosition.column, currentPosition.row + index);
+            testPosition = new BoardPosition((char) (currentPosition.column - index), currentPosition.row);
         }
-        testPosition = new BoardPosition(currentPosition.column, currentPosition.row + index);
+        testPosition = new BoardPosition((char) (currentPosition.column - index), currentPosition.row);
         if (testPosition.isNotOutOfBounds() && !board.isEmpty(testPosition) && board.getPieceAt(testPosition).color != this.color) {
             possibleMoves.add(testPosition);
         }

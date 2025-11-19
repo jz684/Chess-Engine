@@ -43,12 +43,12 @@ public class Pawn extends ChessPiece{
             }
             // Taking
             // Code to find if they are able to take
-            testingPosition = new BoardPosition((char) (currentPosition.column - 1), currentPosition.row - 1);
+            testingPosition = new BoardPosition((char) (currentPosition.column - 1), currentPosition.row + 1);
             if (testingPosition.isNotOutOfBounds() && !board.isEmpty(testingPosition) && board.getPieceAt(testingPosition).color != this.color) {
                 possibleMoves.add(testingPosition);
             }
 
-            testingPosition = new BoardPosition((char) (currentPosition.column - 1), currentPosition.row + 1);
+            testingPosition = new BoardPosition((char) (currentPosition.column + 1), currentPosition.row + 1);
             if (testingPosition.isNotOutOfBounds() && !board.isEmpty(testingPosition) && board.getPieceAt(testingPosition).color != this.color) {
                 possibleMoves.add(testingPosition);
             }
@@ -68,12 +68,12 @@ public class Pawn extends ChessPiece{
             }
             // Taking
             // Code to find if they are able to take
-            testingPosition = new BoardPosition((char) (currentPosition.column + 1), currentPosition.row - 1);
+            testingPosition = new BoardPosition((char) (currentPosition.column - 1), currentPosition.row - 1);
             if (testingPosition.isNotOutOfBounds() && !board.isEmpty(testingPosition) && board.getPieceAt(testingPosition).color != this.color) {
                 possibleMoves.add(testingPosition);
             }
 
-            testingPosition = new BoardPosition((char) (currentPosition.column + 1), currentPosition.row + 1);
+            testingPosition = new BoardPosition((char) (currentPosition.column + 1), currentPosition.row - 1);
             if (testingPosition.isNotOutOfBounds() && !board.isEmpty(testingPosition) && board.getPieceAt(testingPosition).color != this.color) {
                 possibleMoves.add(testingPosition);
             }

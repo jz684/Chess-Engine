@@ -51,6 +51,7 @@ public class ChessBoard {
         ArrayList<BoardPosition> possibleMoves = piece.findPossibleMoves(this);
 
         for (BoardPosition possibleMove : possibleMoves) {
+            System.out.println("Checking " + possibleMove.toString() + " == " + move.getMovePosition());
             if (possibleMove.equals(move.getMovePosition())) {
                 return true;
             }
@@ -325,7 +326,7 @@ public class ChessBoard {
                 System.out.println("In check: " + piece.getName() + " " + piece.toString() + " - " + position.toString());
         }
         else {
-            System.out.println("Invalid Move!");
+            System.out.println("Invalid Move! Line 328");
         }
         if (canCastle(move)) {
             return true;
@@ -361,8 +362,8 @@ public class ChessBoard {
      */
     public boolean isEmpty(BoardPosition position) {
         try {
-            return board[Math.abs(position.row - 8)][position.column - 97] == null &&
-                    (position.row > 0 && position.row < 9) && (position.column > 96 && position.column < 105);
+            return (position.row > 0 && position.row < 9) && (position.column > 96 && position.column < 105 &&
+                    board[Math.abs(position.row - 8)][position.column - 97] == null);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             return true;
