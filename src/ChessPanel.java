@@ -13,6 +13,8 @@ public class ChessPanel extends JPanel {
 
     private boolean running;
 
+    private BoardPosition highlightPosition = null;
+
 //    private ChessBoard chessBoard;
 
     public ChessPanel(ChessGame chessGame) {
@@ -73,6 +75,8 @@ public class ChessPanel extends JPanel {
                 pressed = true;
                 pressedOn = coordsToPosition(e.getX(), e.getY());
                 System.out.println("Pressed on: " + pressedOn);
+                highlightPosition = pressedOn;
+                repaint();
             }
 
             @Override
@@ -133,7 +137,20 @@ public class ChessPanel extends JPanel {
             }
             currentY += SQUARE_LENGTH;
         }
+
+        highlight(g);
+
 //        paintComponent(g);
+    }
+
+    public void highlight(Graphics g) {
+        g.setColor(Color.WHITE);
+        if (highlightPosition != null) {
+            int x = (highlightPosition.column - 97) * SQUARE_LENGTH;
+            int y = (highlightPosition.row + 4) * SQUARE_LENGTH;
+
+            g.drawOval(x, y, SQUARE_LENGTH, SQUARE_LENGTH);
+        }
     }
 
     public void start() {

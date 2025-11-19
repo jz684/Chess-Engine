@@ -34,7 +34,7 @@ public class King extends ChessPiece{
 
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 3; c++) {
-                testPosition = new BoardPosition((char) (currentPosition.column - 1 + c), currentPosition.row + 1 + r);
+                testPosition = new BoardPosition((char) (currentPosition.column - 1 + c), currentPosition.row + 1 - r);
                 if (r != 1 || c != 1) {
                     if (testPosition.isNotOutOfBounds() && board.isEmpty(testPosition)) {
 //                        System.out.println(color + ": Board is empty at: " + testPosition.toString());
