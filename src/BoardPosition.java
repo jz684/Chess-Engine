@@ -17,6 +17,21 @@ public class BoardPosition {
         this.row = position.row;
     }
 
+    // For getting straight from the 2D Array
+    public BoardPosition(int column, int row) {
+        this.column = (char) (column + 97);
+        this.row = Math.abs(row - 8);
+    }
+
+    public int getX() {
+        int x = (column - 97) * ChessPanel.SQUARE_LENGTH;
+        return x;
+    }
+
+    public int getY() {
+        int y = (Math.abs(row - 8)) * ChessPanel.SQUARE_LENGTH;
+        return y;
+    }
 
     public String toString() {
         return "" + column + row;

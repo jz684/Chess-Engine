@@ -44,13 +44,12 @@ public class ChessDriver {
 //        board.printBoard();
 //        System.out.println(board.wouldPutInCheck(board.blackKing));
         try {
-        ChessGame game = new ChessGame();
-        game.startGame();
+            ChessGame game = new ChessGame();
+            game.startGame();
 
         } catch (MoveFormatException e) {
             throw new RuntimeException(e);
         }
-
 
     }
 

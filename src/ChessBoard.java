@@ -84,7 +84,8 @@ public class ChessBoard {
 //                        System.out.println(move.toString() + kingPosition.toString());
 
                         if (move.equals(kingPosition)) {
-//                            System.out.println("ABOUT TO RETURN");
+                            System.out.println("Im in Check!");
+                            printBoard();
                             return true;
                         }
                     }
@@ -133,11 +134,6 @@ public class ChessBoard {
             return blackKing;
     }
 
-    // returns if the move was successful
-    // TODO delete
-    public boolean movePiece(BoardPosition piecePosition, BoardPosition targetPosition) {
-        return movePiece(getPieceAt(piecePosition), targetPosition);
-    }
 
     public void tryMovePiece(Move move) {
         // if it is a valid move and the king is not in check.

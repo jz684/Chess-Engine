@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class ChessPanel extends JPanel {
 
@@ -9,7 +10,7 @@ public class ChessPanel extends JPanel {
 
     private static final int SCREEN_WIDTH = 600;
     private static final int SCREEN_HEIGHT = 600;
-    private static final int SQUARE_LENGTH = 75;
+    static final int SQUARE_LENGTH = 75;
 
     private boolean running;
 
@@ -22,7 +23,7 @@ public class ChessPanel extends JPanel {
         this.setLayout(null);
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         running = true;
-        start();
+//        start();
     }
 
     public BoardPosition coordsToPosition(int x, int y) {
@@ -64,19 +65,22 @@ public class ChessPanel extends JPanel {
 
     public void listenForMove() {
         this.addMouseListener(new MouseAdapter() {
+            private boolean pressed = false;
 
-            private boolean pressed;
             private BoardPosition pressedOn = null;
 
             private BoardPosition firstPosition;
 
             @Override
             public void mousePressed(MouseEvent e) {
-                pressed = true;
-                pressedOn = coordsToPosition(e.getX(), e.getY());
-                System.out.println("Pressed on: " + pressedOn);
-                highlightPosition = pressedOn;
-                repaint();
+                if (!pressed) {
+                    pressed = true;
+                    pressedOn = coordsToPosition(e.getX(), e.getY());
+                    System.out.println("Pressed on: " + pressedOn);
+                    highlightPosition = pressedOn;
+                    repaint();
+
+                }
             }
 
             @Override
@@ -86,16 +90,18 @@ public class ChessPanel extends JPanel {
                     BoardPosition releasedOn = coordsToPosition(e.getX(), e.getY());
                     System.out.println("Released on: " + releasedOn);
                     if (!pressedOn.equals(releasedOn)) {
-                        System.out.println(pressedOn + " to " + releasedOn);
+//                        System.out.println(pressedOn + " to " + releasedOn);
                         makeMove(new Move(pressedOn, releasedOn));
                         pressedOn = null;
                         firstPosition = null;
+                        highlightPosition = null;
                     }
                     else if (firstPosition != null && !firstPosition.equals(releasedOn)) {
-                        System.out.println(firstPosition + " to " + releasedOn);
+//                        System.out.println(firstPosition + " to " + releasedOn);
                         makeMove(new Move(firstPosition, releasedOn));
                         pressedOn = null;
                         firstPosition = null;
+                        highlightPosition = null;
                     }
                     else {
                         firstPosition = pressedOn;
@@ -114,6 +120,7 @@ public class ChessPanel extends JPanel {
         int currentY = 0;
         Color whiteSquare = new Color(255, 238, 176);
         Color blackSquare = new Color(128, 81, 37);
+//        Color highlightedSquare = new Color(117, 143, 113);
 
         for (int r = 0; r < SCREEN_HEIGHT / SQUARE_LENGTH; r++) {
             currentX = 0;
@@ -125,6 +132,7 @@ public class ChessPanel extends JPanel {
             }
             for (int c = 0; c < SCREEN_WIDTH / SQUARE_LENGTH; c++) {
                 if (c != 0) {
+//                    if (c == highlightPosition.column && r == highlightPosition.row)
                     if (g.getColor().equals(whiteSquare)) {
                         g.setColor(blackSquare);
                     }
@@ -143,14 +151,39 @@ public class ChessPanel extends JPanel {
 //        paintComponent(g);
     }
 
-    public void highlight(Graphics g) {
-        g.setColor(Color.WHITE);
-        if (highlightPosition != null) {
-            int x = (highlightPosition.column - 97) * SQUARE_LENGTH;
-            int y = (highlightPosition.row + 4) * SQUARE_LENGTH;
-
-            g.drawOval(x, y, SQUARE_LENGTH, SQUARE_LENGTH);
+    public void drawPossibleMoves(Graphics g) {
+        g.setColor(Color.DARK_GRAY);
+        if (highlightPosition != null && chessGame.getChessBoard().getPieceAt(highlightPosition) != null) {
+            ArrayList<BoardPosition> possiblePositions = chessGame.getChessBoard().getPieceAt(highlightPosition).getPossibleMoves();
+            for (int r = 0; r < SCREEN_WIDTH / SQUARE_LENGTH; r++) {
+                for (int c = 0; c < SCREEN_WIDTH / SQUARE_LENGTH; c++) {
+                    BoardPosition position = new BoardPosition(c, r);
+                    for (BoardPosition possiblePosition : possiblePositions) {
+                        if (position.equals(possiblePosition) /*&& chessGame.getChessBoard().validMove(new Move(highlightPosition, possiblePosition))*/) {
+                            System.out.println("Drawing move at: " + position.toString());
+                            g.fillOval(position.getX() + SQUARE_LENGTH / 3, position.getY() + SQUARE_LENGTH / 3, SQUARE_LENGTH / 3, SQUARE_LENGTH / 3);
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    public void highlight(Graphics g) {
+        // For Pressing on squares
+        g.setColor(new Color(117, 143, 113));
+        if (highlightPosition != null) {
+            g.fillRect(highlightPosition.getX(), highlightPosition.getY(), SQUARE_LENGTH, SQUARE_LENGTH);
+        }
+
+        g.setColor(new Color(250, 93, 93));
+        if (chessGame.getChessBoard().inCheck(chessGame.getChessBoard().blackKing)) {
+            g.fillRect(chessGame.getChessBoard().blackKing.getX(), chessGame.getChessBoard().blackKing.getY(), SQUARE_LENGTH, SQUARE_LENGTH);
+        }
+        else if (chessGame.getChessBoard().inCheck(chessGame.getChessBoard().whiteKing)) {
+            g.fillRect(chessGame.getChessBoard().whiteKing.getX(), chessGame.getChessBoard().whiteKing.getY(), SQUARE_LENGTH, SQUARE_LENGTH);
+        }
+
     }
 
     public void start() {
@@ -204,6 +237,7 @@ public class ChessPanel extends JPanel {
             drawBoard(g);
             chessGame.printBoard();
             drawPieces();
+            drawPossibleMoves(g);
         }
         else {
             System.out.println("End running");
