@@ -17,8 +17,27 @@ public class ChessBoard {
         return board;
     }
 
-    public ChessBoard(ChessPiece[][] board) {
+    public void setBoard(ChessPiece[][] board) {
         this.board = board;
+    }
+
+    public ChessBoard(ChessPiece[][] board, King blackKing, King whiteKing) {
+
+        this.board = new ChessPiece[8][8];
+
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                ChessPiece p = board[r][c];
+                if (p != null) {
+                    this.board[r][c] = p.copy();
+                }
+            }
+        }
+
+        this.whiteKing = (King)this.board[Math.abs(whiteKing.row - 8)][whiteKing.column - 97];
+        this.blackKing = (King)this.board[Math.abs(blackKing.row - 8)][blackKing.column - 97];
+
+        updateBoard();
     }
 
     public int getMoveColor(BoardPosition position) {
@@ -38,20 +57,23 @@ public class ChessBoard {
         ArrayList<BoardPosition> positions = piece.getPossibleMoves();
         for (BoardPosition position : positions) {
             Move move = new Move(piece, position);
-            if (validMove(move) && !wouldPutInCheck(move)) {
+            if (validMove(move)) {
 //                System.out.println(piece.getName() + " can move to " + positions.toString());
                 return true;
             }
         }
         return false;
     }
-
     public boolean validMove(Move move) {
+        return possibleMove(move) && !wouldPutInCheck(move);
+    }
+
+    public boolean possibleMove(Move move) {
         ChessPiece piece = getPieceAt(move.getInitPosition());
         ArrayList<BoardPosition> possibleMoves = piece.findPossibleMoves(this);
 
         for (BoardPosition possibleMove : possibleMoves) {
-            System.out.println("Checking " + possibleMove.toString() + " == " + move.getMovePosition());
+//            System.out.println("Checking " + possibleMove.toString() + " == " + move.getMovePosition());
             if (possibleMove.equals(move.getMovePosition())) {
                 return true;
             }
@@ -102,26 +124,16 @@ public class ChessBoard {
         // Index through every piece on the board that isn't yours. if one of their possible moves
 
         // A temp board to test if this move would put my king in check.
-        ChessBoard testBoard = this;
-        ChessPiece[][] board = testBoard.board;
-        King king = findKing(getPieceAt(move.getInitPosition()));
+        ChessBoard testBoard = new ChessBoard(board, blackKing, whiteKing);
+        King testKing = testBoard.findKing(testBoard.getPieceAt(move.getInitPosition()));
+        testBoard.forceMove(move);
 
-        testBoard.tryMovePiece(move);
-
-        for (int r = 0; r < board.length; r++) {
-            for (int c = 0; c <board[0].length; c++) {
-                if (board[r][c] != null) {
-                    ArrayList<BoardPosition> possibleMoves = board[r][c].getPossibleMoves();
-                    for (BoardPosition possibleMove : possibleMoves) {
-                        if (possibleMove.equals(king)) {
-//                            System.out.println("That would put you in check!");
-                            return true;
-                        }
-                    }
-                }
-
-            }
+        if (testBoard.inCheck(testKing)) {
+            System.out.println("That would put me in check");
+//            this.printBoard();
+            return true;
         }
+
         return false;
 
 
@@ -136,14 +148,19 @@ public class ChessBoard {
     }
 
 
-    public void tryMovePiece(Move move) {
-        // if it is a valid move and the king is not in check.
-        ChessPiece piece = getPieceAt(move.getInitPosition());
-        board[Math.abs(piece.row - 8)][piece.column - 97] = null;
-        board[Math.abs(move.getMovePosition().row - 8)][move.getMovePosition().column - 97] = piece;
 
+    /**
+     * To try to move a piece no matter what
+     * @param move
+     */
+    public void forceMove(Move move) {
+        System.out.println("Forcing " + move.toString());
+        // if it is a valid move and the king is not in check.
+        ChessPiece piece = this.getPieceAt(move.getInitPosition());
+        this.board[Math.abs(piece.row - 8)][piece.column - 97] = null;
+        this.board[Math.abs(move.getMovePosition().row - 8)][move.getMovePosition().column - 97] = piece;
         piece.move(move.getMovePosition());
-        updateBoard();
+        this.updateBoard();
 
     }
 
@@ -309,9 +326,10 @@ public class ChessBoard {
 
 
         // if it is a valid move and the king is not in check.
-//            System.out.println("Twas a valid move");
-        if (validMove(move)){
+        if (possibleMove(move)){
+            System.out.println("Is a possible move");
             if (!wouldPutInCheck(move)){
+                System.out.println("Moving!!!" + move.toString());
                 board[Math.abs(piece.row - 8)][piece.column - 97] = null;
                 board[Math.abs(position.row - 8)][position.column - 97] = piece;
 
@@ -319,17 +337,15 @@ public class ChessBoard {
                 updateBoard();
                 return true;
 
-                // TODO switchSides() that swaps who can move pieces after each move
-
             }
             else
                 System.out.println("In check: " + piece.getName() + " " + piece.toString() + " - " + position.toString());
         }
+        else if (canCastle(move)) {
+            return true;
+        }
         else {
             System.out.println("Invalid Move! Line 328");
-        }
-        if (canCastle(move)) {
-            return true;
         }
         return false;
     }

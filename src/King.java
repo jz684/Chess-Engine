@@ -9,6 +9,17 @@ public class King extends ChessPiece{
     }
 
     @Override
+    public ChessPiece copy() {
+        ChessPiece copy = new King(new BoardPosition(this.column, this.row), this.color);
+
+        copy.hasMoved = this.hasMoved;
+        copy.pieceIcon = this.pieceIcon;
+
+
+        return copy;
+    }
+
+    @Override
     public void move(BoardPosition pos) {
         super.move(pos);
     }

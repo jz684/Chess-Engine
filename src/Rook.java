@@ -9,6 +9,17 @@ public class Rook extends ChessPiece{
     }
 
     @Override
+    public ChessPiece copy() {
+        ChessPiece copy = new Rook(new BoardPosition(this.column, this.row), this.color);
+
+        copy.hasMoved = this.hasMoved;
+        copy.pieceIcon = this.pieceIcon;
+
+
+        return copy;
+    }
+
+    @Override
     public void move(BoardPosition pos) {
         super.move(pos);
         if (!hasMoved)
@@ -61,7 +72,7 @@ public class Rook extends ChessPiece{
         testPosition = new BoardPosition(currentPosition.column, currentPosition.row - index);
         while (board.isEmpty(testPosition)) {
             possibleMoves.add(testPosition);
-            System.out.println(testPosition.toString());
+//            System.out.println(testPosition.toString());
             index++;
             testPosition = new BoardPosition(currentPosition.column, currentPosition.row - index);
         }

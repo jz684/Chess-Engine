@@ -3,14 +3,22 @@ import java.util.ArrayList;
 
 public class Pawn extends ChessPiece{
 
-    public Pawn() {
-        super();
-    }
-
     public Pawn(BoardPosition position, int color) {
         super(position, color);
         super.setImage(findImage(color));
     }
+
+    @Override
+    public ChessPiece copy() {
+        ChessPiece copy = new Pawn(new BoardPosition(this.column, this.row), this.color);
+
+        copy.hasMoved = this.hasMoved;
+        copy.pieceIcon = this.pieceIcon;
+
+
+        return copy;
+    }
+
 
     @Override
     public ImageIcon findImage(int color) {

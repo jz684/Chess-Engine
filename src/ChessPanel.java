@@ -32,7 +32,7 @@ public class ChessPanel extends JPanel {
         int column = y / 75;
 
         char row = (char) (x + 97);
-        System.out.println(new BoardPosition(row, column));
+//        System.out.println(new BoardPosition(row, column));
         return new BoardPosition(row, column);
     }
 
@@ -76,7 +76,7 @@ public class ChessPanel extends JPanel {
                 if (!pressed) {
                     pressed = true;
                     pressedOn = coordsToPosition(e.getX(), e.getY());
-                    System.out.println("Pressed on: " + pressedOn);
+//                    System.out.println("Pressed on: " + pressedOn);
                     highlightPosition = pressedOn;
                     repaint();
 
@@ -88,13 +88,14 @@ public class ChessPanel extends JPanel {
                 if (pressed) {
                     pressed = false;
                     BoardPosition releasedOn = coordsToPosition(e.getX(), e.getY());
-                    System.out.println("Released on: " + releasedOn);
+//                    System.out.println("Released on: " + releasedOn);
+                    // If the piece you released on is not the same as the one you pressed on
                     if (!pressedOn.equals(releasedOn)) {
 //                        System.out.println(pressedOn + " to " + releasedOn);
                         makeMove(new Move(pressedOn, releasedOn));
                         pressedOn = null;
                         firstPosition = null;
-                        highlightPosition = null;
+
                     }
                     else if (firstPosition != null && !firstPosition.equals(releasedOn)) {
 //                        System.out.println(firstPosition + " to " + releasedOn);
@@ -160,7 +161,7 @@ public class ChessPanel extends JPanel {
                     BoardPosition position = new BoardPosition(c, r);
                     for (BoardPosition possiblePosition : possiblePositions) {
                         if (position.equals(possiblePosition) /*&& chessGame.getChessBoard().validMove(new Move(highlightPosition, possiblePosition))*/) {
-                            System.out.println("Drawing move at: " + position.toString());
+//                            System.out.println("Drawing move at: " + position.toString());
                             g.fillOval(position.getX() + SQUARE_LENGTH / 3, position.getY() + SQUARE_LENGTH / 3, SQUARE_LENGTH / 3, SQUARE_LENGTH / 3);
                         }
                     }
@@ -235,7 +236,7 @@ public class ChessPanel extends JPanel {
         if (running) {
             removeAll();
             drawBoard(g);
-            chessGame.printBoard();
+//            chessGame.printBoard();
             drawPieces();
             drawPossibleMoves(g);
         }

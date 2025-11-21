@@ -9,6 +9,17 @@ public class Knight extends ChessPiece{
     }
 
     @Override
+    public ChessPiece copy() {
+        ChessPiece copy = new Knight(new BoardPosition(this.column, this.row), this.color);
+
+        copy.hasMoved = this.hasMoved;
+        copy.pieceIcon = this.pieceIcon;
+
+
+        return copy;
+    }
+
+    @Override
     public ImageIcon findImage(int color) {
         if (color == 1) {
             return new ImageIcon("src/images/blackKnight.png");

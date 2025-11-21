@@ -56,6 +56,8 @@ public abstract class ChessPiece extends BoardPosition{
 
     public abstract String getName();
 
+    public abstract ChessPiece copy();
+
     public void printPossibleMoves() {
         for (BoardPosition position : possibleMoves) {
             System.out.print(position.toString() + ", ");

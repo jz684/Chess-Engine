@@ -9,6 +9,17 @@ public class Bishop extends ChessPiece{
     }
 
     @Override
+    public ChessPiece copy() {
+        ChessPiece copy = new Bishop(new BoardPosition(this.column, this.row), this.color);
+
+        copy.hasMoved = this.hasMoved;
+        copy.pieceIcon = this.pieceIcon;
+
+
+        return copy;
+    }
+
+    @Override
     public ImageIcon findImage(int color) {
         if (color == 1) {
             return new ImageIcon("src/images/blackBishop.png");

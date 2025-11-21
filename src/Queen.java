@@ -9,6 +9,17 @@ public class Queen extends ChessPiece{
     }
 
     @Override
+    public ChessPiece copy() {
+        ChessPiece copy = new Queen(new BoardPosition(this.column, this.row), this.color);
+
+        copy.hasMoved = this.hasMoved;
+        copy.pieceIcon = this.pieceIcon;
+
+
+        return copy;
+    }
+
+    @Override
     public ImageIcon findImage(int color) {
         if (color == 1) {
             return new ImageIcon("src/images/blackQueen.png");
@@ -56,7 +67,7 @@ public class Queen extends ChessPiece{
         testPosition = new BoardPosition(currentPosition.column, currentPosition.row - index);
         while (board.isEmpty(testPosition)) {
             possibleMoves.add(testPosition);
-            System.out.println(testPosition.toString());
+//            System.out.println(testPosition.toString());
             index++;
             testPosition = new BoardPosition(currentPosition.column, currentPosition.row - index);
         }
