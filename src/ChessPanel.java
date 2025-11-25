@@ -22,7 +22,13 @@ public class ChessPanel extends JPanel {
         this.chessGame = chessGame;
         this.setLayout(null);
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+
+        Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
+        this.setCursor(cursor);
+
         running = true;
+
+
 //        start();
     }
 
@@ -48,11 +54,15 @@ public class ChessPanel extends JPanel {
                     JLabel testImg = new JLabel(imageIcon);
                     testImg.setVisible(true);
                     testImg.setBounds(c * SQUARE_LENGTH,r * SQUARE_LENGTH, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+//                    if (highlightPosition != null && board[r][c].equals(highlightPosition)) {
+//                        testImg.setVisible(false);
+//                    }
                     this.add(testImg);
                 }
             }
         }
 
+//        holdPiece();
 
     }
 
@@ -62,6 +72,33 @@ public class ChessPanel extends JPanel {
         chessGame.turn(move);
         repaint();
     }
+
+//    public void createHeldPiece(Point point) {
+////        System.out.println("Creating piece at: (" + point.toString() + ") ");
+//        ChessPiece piece = chessGame.getChessBoard().getPieceAt(highlightPosition);
+//        System.out.println(piece.toString());
+//        ImageIcon icon = new ImageIcon(piece.pieceIcon.getImage().getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH));
+//        JLabel heldImage = new JLabel(icon);
+////        heldImage.setBounds((int) point.getX(), (int) point.getY(), icon.getIconWidth(), icon.getIconHeight());
+//        heldImage.setBounds(100, 100, icon.getIconWidth(), icon.getIconHeight());
+//        System.out.println(heldImage.getBounds());
+//        heldImage.setVisible(true);
+//        this.add(heldImage);
+//    }
+//
+//    public void holdPiece() {
+//        if (highlightPosition != null && chessGame.getChessBoard().getPieceAt(highlightPosition) != null) {
+//
+//            this.addMouseMotionListener(new MouseAdapter() {
+//
+//                @Override
+//                public void mouseMoved(MouseEvent e) {
+//                    createHeldPiece(e.getPoint());
+//                }
+//            });
+//
+//        }
+//    }
 
     public void listenForMove() {
         this.addMouseListener(new MouseAdapter() {
@@ -95,7 +132,7 @@ public class ChessPanel extends JPanel {
                         makeMove(new Move(pressedOn, releasedOn));
                         pressedOn = null;
                         firstPosition = null;
-
+                        highlightPosition = null;
                     }
                     else if (firstPosition != null && !firstPosition.equals(releasedOn)) {
 //                        System.out.println(firstPosition + " to " + releasedOn);

@@ -12,6 +12,7 @@ public class ChessFrame extends JFrame {
         this.setIconImage(createLogo());
         this.pack();
         this.setVisible(true);
+        this.setLayout(null);
         this.setLocationRelativeTo(null);
     }
 
