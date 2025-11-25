@@ -14,6 +14,8 @@ public class ChessPanel extends JPanel {
 
     private boolean running;
 
+    private boolean flipped;
+
     private BoardPosition highlightPosition = null;
 
 //    private ChessBoard chessBoard;
@@ -22,9 +24,8 @@ public class ChessPanel extends JPanel {
         this.chessGame = chessGame;
         this.setLayout(null);
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
-
-        Cursor cursor = new Cursor(Cursor.HAND_CURSOR);
-        this.setCursor(cursor);
+        this.flipped = chessGame.flipped();
+        this.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         running = true;
 
@@ -33,34 +34,74 @@ public class ChessPanel extends JPanel {
     }
 
     public BoardPosition coordsToPosition(int x, int y) {
-        x = x / 75;
-        y = Math.abs(y - 675); // Calculation to get normalized board layout
-        int column = y / 75;
+//        boolean flipped = chessGame.flipped();
 
-        char row = (char) (x + 97);
-//        System.out.println(new BoardPosition(row, column));
-        return new BoardPosition(row, column);
+        if (!flipped) {
+            x = x / 75;
+            y = Math.abs(y - 675); // Calculation to get normalized board layout
+
+            int column = y / 75;
+
+            char row = (char) (x + 97);
+    //        System.out.println(new BoardPosition(row, column));
+            return new BoardPosition(row, column);
+
+        }
+        else {
+            x = x / 75;
+            y = y / 75;
+
+            char row = (char) (104 - x);
+            int column = y + 1;
+
+            return new BoardPosition(row, column);
+
+        }
     }
 
     public void drawPieces() {
+//        boolean flipped = chessGame.flipped();
         ChessPiece[][] board = chessGame.getBoard();
 
-        for (int r = 0; r < SCREEN_HEIGHT / SQUARE_LENGTH; r++) {
-            for (int c = 0; c < SCREEN_WIDTH / SQUARE_LENGTH; c++) {
-                if (board[r][c] != null) {
-//                    System.out.println(board[r][c].getName());
-                    Image image = board[r][c].pieceIcon.getImage();
-                    ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH)); // Resize
-                    JLabel testImg = new JLabel(imageIcon);
-                    testImg.setVisible(true);
-                    testImg.setBounds(c * SQUARE_LENGTH,r * SQUARE_LENGTH, imageIcon.getIconWidth(), imageIcon.getIconHeight());
-//                    if (highlightPosition != null && board[r][c].equals(highlightPosition)) {
-//                        testImg.setVisible(false);
-//                    }
-                    this.add(testImg);
+        // White is moving
+        if (!flipped) {
+            for (int r = 0; r < SCREEN_HEIGHT / SQUARE_LENGTH; r++) {
+                for (int c = 0; c < SCREEN_WIDTH / SQUARE_LENGTH; c++) {
+                    if (board[r][c] != null) {
+    //                    System.out.println(board[r][c].getName());
+                        Image image = board[r][c].pieceIcon.getImage();
+                        ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH)); // Resize
+                        JLabel testImg = new JLabel(imageIcon);
+                        testImg.setVisible(true);
+                        testImg.setBounds(c * SQUARE_LENGTH,r * SQUARE_LENGTH, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+    //                    if (highlightPosition != null && board[r][c].equals(highlightPosition)) {
+    //                        testImg.setVisible(false);
+    //                    }
+                        this.add(testImg);
+                    }
+                }
+            }
+
+        }
+        else {
+            for (int r = 7; r >= 0; r--) {
+                for (int c = 7; c >= 0; c--) {
+                    if (board[r][c] != null) {
+                        //                    System.out.println(board[r][c].getName());
+                        Image image = board[r][c].pieceIcon.getImage();
+                        ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH)); // Resize
+                        JLabel testImg = new JLabel(imageIcon);
+                        testImg.setVisible(true);
+                        testImg.setBounds(Math.abs(c - 7) * SQUARE_LENGTH ,Math.abs(r - 7) * SQUARE_LENGTH, imageIcon.getIconWidth(), imageIcon.getIconHeight());
+                        //                    if (highlightPosition != null && board[r][c].equals(highlightPosition)) {
+                        //                        testImg.setVisible(false);
+                        //                    }
+                        this.add(testImg);
+                    }
                 }
             }
         }
+
 
 //        holdPiece();
 
@@ -70,6 +111,7 @@ public class ChessPanel extends JPanel {
         System.out.println(move.toString());
         // TODO
         chessGame.turn(move);
+        flipped = chessGame.flipped();
         repaint();
     }
 
@@ -153,7 +195,9 @@ public class ChessPanel extends JPanel {
     }
 
     public void drawBoard(Graphics g) {
+//        boolean flipped = chessGame.flipped();
         // If it starts on an odd num its black, else its green
+
         int currentX = 0;
         int currentY = 0;
         Color whiteSquare = new Color(255, 238, 176);
@@ -162,11 +206,22 @@ public class ChessPanel extends JPanel {
 
         for (int r = 0; r < SCREEN_HEIGHT / SQUARE_LENGTH; r++) {
             currentX = 0;
-            if (r % 2 == 0) {
-                g.setColor(whiteSquare);
+            if (!flipped){
+                if (r % 2 == 0) {
+                    g.setColor(whiteSquare);
+                }
+                else {
+                    g.setColor(blackSquare);
+                }
+
             }
             else {
-                g.setColor(blackSquare);
+                if (r % 2 == 1) {
+                    g.setColor(whiteSquare);
+                }
+                else {
+                    g.setColor(blackSquare);
+                }
             }
             for (int c = 0; c < SCREEN_WIDTH / SQUARE_LENGTH; c++) {
                 if (c != 0) {
@@ -199,7 +254,10 @@ public class ChessPanel extends JPanel {
                     for (BoardPosition possiblePosition : possiblePositions) {
                         if (position.equals(possiblePosition) /*&& chessGame.getChessBoard().validMove(new Move(highlightPosition, possiblePosition))*/) {
 //                            System.out.println("Drawing move at: " + position.toString());
-                            g.fillOval(position.getX() + SQUARE_LENGTH / 3, position.getY() + SQUARE_LENGTH / 3, SQUARE_LENGTH / 3, SQUARE_LENGTH / 3);
+                            if (!flipped)
+                                g.fillOval(position.getX() + SQUARE_LENGTH / 3, position.getY() + SQUARE_LENGTH / 3, SQUARE_LENGTH / 3, SQUARE_LENGTH / 3);
+                            else
+                                g.fillOval(position.getFlippedX() + SQUARE_LENGTH / 3, position.getFlippedY() + SQUARE_LENGTH / 3, SQUARE_LENGTH / 3, SQUARE_LENGTH / 3);
                         }
                     }
                 }
@@ -209,17 +267,34 @@ public class ChessPanel extends JPanel {
 
     public void highlight(Graphics g) {
         // For Pressing on squares
-        g.setColor(new Color(117, 143, 113));
-        if (highlightPosition != null) {
-            g.fillRect(highlightPosition.getX(), highlightPosition.getY(), SQUARE_LENGTH, SQUARE_LENGTH);
-        }
+        if (!flipped) {
+            g.setColor(new Color(117, 143, 113));
+            if (highlightPosition != null) {
+                g.fillRect(highlightPosition.getX(), highlightPosition.getY(), SQUARE_LENGTH, SQUARE_LENGTH);
+            }
 
-        g.setColor(new Color(250, 93, 93));
-        if (chessGame.getChessBoard().inCheck(chessGame.getChessBoard().blackKing)) {
-            g.fillRect(chessGame.getChessBoard().blackKing.getX(), chessGame.getChessBoard().blackKing.getY(), SQUARE_LENGTH, SQUARE_LENGTH);
+            g.setColor(new Color(250, 93, 93));
+            if (chessGame.getChessBoard().inCheck(chessGame.getChessBoard().blackKing)) {
+                g.fillRect(chessGame.getChessBoard().blackKing.getX(), chessGame.getChessBoard().blackKing.getY(), SQUARE_LENGTH, SQUARE_LENGTH);
+            }
+            else if (chessGame.getChessBoard().inCheck(chessGame.getChessBoard().whiteKing)) {
+                g.fillRect(chessGame.getChessBoard().whiteKing.getX(), chessGame.getChessBoard().whiteKing.getY(), SQUARE_LENGTH, SQUARE_LENGTH);
+            }
+
         }
-        else if (chessGame.getChessBoard().inCheck(chessGame.getChessBoard().whiteKing)) {
-            g.fillRect(chessGame.getChessBoard().whiteKing.getX(), chessGame.getChessBoard().whiteKing.getY(), SQUARE_LENGTH, SQUARE_LENGTH);
+        else {
+            g.setColor(new Color(117, 143, 113));
+            if (highlightPosition != null) {
+                g.fillRect(highlightPosition.getFlippedX(), highlightPosition.getFlippedY(), SQUARE_LENGTH, SQUARE_LENGTH);
+            }
+
+            g.setColor(new Color(250, 93, 93));
+            if (chessGame.getChessBoard().inCheck(chessGame.getChessBoard().blackKing)) {
+                g.fillRect(chessGame.getChessBoard().blackKing.getFlippedX(), chessGame.getChessBoard().blackKing.getFlippedY(), SQUARE_LENGTH, SQUARE_LENGTH);
+            }
+            else if (chessGame.getChessBoard().inCheck(chessGame.getChessBoard().whiteKing)) {
+                g.fillRect(chessGame.getChessBoard().whiteKing.getFlippedX(), chessGame.getChessBoard().whiteKing.getFlippedY(), SQUARE_LENGTH, SQUARE_LENGTH);
+            }
         }
 
     }

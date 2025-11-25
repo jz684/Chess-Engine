@@ -42,6 +42,9 @@ public class ChessGame {
         board.printBoard();
     }
 
+    public boolean flipped() {
+        return currentTurnsPlayer.getColor() == 1;
+    }
 
     public void turn(Move move) {
         if (board.getMoveColor(move) == currentTurnsPlayer.getColor()) {

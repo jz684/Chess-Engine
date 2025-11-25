@@ -33,6 +33,16 @@ public class BoardPosition {
         return y;
     }
 
+    public int getFlippedX() {
+        int x = Math.abs(104 - column) * ChessPanel.SQUARE_LENGTH;
+        return x;
+    }
+
+    public int getFlippedY() {
+        int y = (row - 1) * ChessPanel.SQUARE_LENGTH;
+        return y;
+    }
+
     public String toString() {
         return "" + column + row;
     }
