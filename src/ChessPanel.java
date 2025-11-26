@@ -22,15 +22,13 @@ public class ChessPanel extends JPanel {
 
     public ChessPanel(ChessGame chessGame) {
         this.chessGame = chessGame;
-        this.setLayout(null);
+        this.setLayout(new BorderLayout());
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.flipped = chessGame.flipped();
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         running = true;
 
-
-//        start();
     }
 
     public BoardPosition coordsToPosition(int x, int y) {
@@ -303,31 +301,37 @@ public class ChessPanel extends JPanel {
 //        chessGame.startGame();
 //        drawBoard();
         listenForMove();
+        ChessGui chessGui = new ChessGui(chessGame);
+        chessGui.checkMate();
+        this.add(chessGui);
         repaint();
     }
 
     // TODO
-    public void winScreen(King king) {
+    public void winScreen(Player winner) {
         String color;
-        System.out.println("Winner :" + king.toString() + " " + king.color);
-        if (king.color == 0)
+//        System.out.println("Winner :" + king.toString() + " " + king.color);
+        if (winner.getColor() == 0)
             color = "White";
         else
             color = "Black";
+        JButton rematch = new JButton("Rematch");
+        rematch.setBounds((SCREEN_WIDTH - 200) / 2, (SCREEN_HEIGHT - 100) / 2, 200, 100);
+        this.add(rematch);
         JLabel winText = new JLabel(color + " King Wins!");
         winText.setBounds(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
         winText.setVisible(true);
         this.add(winText);
     }
 
-    public King getWinner() {
-        if (chessGame.checkMate(chessGame.getChessBoard().whiteKing)) {
-            return chessGame.getChessBoard().blackKing;
-        }
-        else {
-            return chessGame.getChessBoard().whiteKing;
-        }
-    }
+//    public King getWinner() {
+//        if (chessGame.checkMate(chessGame.getChessBoard().whiteKing)) {
+//            return chessGame.getChessBoard().blackKing;
+//        }
+//        else {
+//            return chessGame.getChessBoard().whiteKing;
+//        }
+//    }
 
     public boolean checkForMate() {
         if (chessGame.checkMate(chessGame.getChessBoard().whiteKing) || chessGame.checkMate(chessGame.getChessBoard().blackKing)) {
@@ -355,10 +359,13 @@ public class ChessPanel extends JPanel {
         else {
             System.out.println("End running");
             removeAll();
-            System.out.println("Winner is :" + getWinner().toString());
-            winScreen(getWinner());
+            drawBoard(g);
+            drawPieces();
+//            System.out.println("Winner is :" + getWinner().toString());
+            winScreen(chessGame.getWinner());
         }
 
 
     }
 }
+

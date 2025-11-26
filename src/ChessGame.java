@@ -46,6 +46,15 @@ public class ChessGame {
         return currentTurnsPlayer.getColor() == 1;
     }
 
+    public Player getWinner() {
+        if (checkMate(board.whiteKing)) {
+            return player1;
+        }
+        else {
+            return player2;
+        }
+    }
+
     public void turn(Move move) {
         if (board.getMoveColor(move) == currentTurnsPlayer.getColor()) {
             if (board.movePiece(move)) {
