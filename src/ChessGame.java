@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 import java.sql.SQLOutput;
 import java.util.Timer;
 
@@ -8,6 +10,7 @@ public class ChessGame {
     private Player player1;
     private Player player2;
     private Player currentTurnsPlayer;
+    private JLayeredPane layeredPane;
 
     public ChessGame() {
         board = new ChessBoard();
@@ -19,9 +22,23 @@ public class ChessGame {
     }
 
     public void startGame() throws MoveFormatException {
+        initLayeredPane();
         ChessPanel panel = new ChessPanel(this);
-        ChessFrame frame = new ChessFrame(panel);
+        layeredPane.add(panel, JLayeredPane.DEFAULT_LAYER);
+        ChessFrame frame = new ChessFrame(layeredPane);
         panel.start();
+    }
+
+    public void initLayeredPane() {
+        layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(600, 600));
+        layeredPane.setVisible(true);
+    }
+
+    public void showWinScreen() {
+        ChessGui gui = new ChessGui(this);
+        gui.checkMate();
+        layeredPane.add(gui);
     }
 
     public ChessBoard getChessBoard() {

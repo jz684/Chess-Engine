@@ -9,7 +9,8 @@ public class ChessGui extends JPanel {
 
     public ChessGui(ChessGame chessGame) {
         this.setLayout(null);
-        this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+//        this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        this.setBounds(100, 100, SCREEN_WIDTH, SCREEN_HEIGHT);
         this.chessGame = chessGame;
     }
 

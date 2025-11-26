@@ -23,7 +23,8 @@ public class ChessPanel extends JPanel {
     public ChessPanel(ChessGame chessGame) {
         this.chessGame = chessGame;
         this.setLayout(new BorderLayout());
-        this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+//        this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        this.setBounds(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         this.flipped = chessGame.flipped();
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
@@ -315,9 +316,10 @@ public class ChessPanel extends JPanel {
             color = "White";
         else
             color = "Black";
-        JButton rematch = new JButton("Rematch");
-        rematch.setBounds((SCREEN_WIDTH - 200) / 2, (SCREEN_HEIGHT - 100) / 2, 200, 100);
-        this.add(rematch);
+        chessGame.showWinScreen();
+//        JButton rematch = new JButton("Rematch");
+//        rematch.setBounds((SCREEN_WIDTH - 200) / 2, (SCREEN_HEIGHT - 100) / 2, 200, 100);
+//        this.add(rematch);
         JLabel winText = new JLabel(color + " King Wins!");
         winText.setBounds(0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
         winText.setVisible(true);
