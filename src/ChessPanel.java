@@ -302,9 +302,6 @@ public class ChessPanel extends JPanel {
 //        chessGame.startGame();
 //        drawBoard();
         listenForMove();
-        ChessGui chessGui = new ChessGui(chessGame);
-        chessGui.checkMate();
-        this.add(chessGui);
         repaint();
     }
 

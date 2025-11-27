@@ -25,7 +25,7 @@ public class ChessDriver {
 //
 //        System.out.println(gui.getBounds());
 ////        layeredPane.setVisible(true);
-//        ChessFrame frame = new ChessFrame(layeredPane);
+//        ChessFrame frame = new ChessFrame(gui);
 
         } catch (MoveFormatException e) {
             throw new RuntimeException(e);

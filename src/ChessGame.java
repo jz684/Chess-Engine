@@ -10,7 +10,10 @@ public class ChessGame {
     private Player player1;
     private Player player2;
     private Player currentTurnsPlayer;
+
     private JLayeredPane layeredPane;
+    private ChessFrame chessFrame;
+    private ChessPanel chessPanel;
 
     public ChessGame() {
         board = new ChessBoard();
@@ -25,8 +28,26 @@ public class ChessGame {
         initLayeredPane();
         ChessPanel panel = new ChessPanel(this);
         layeredPane.add(panel, JLayeredPane.DEFAULT_LAYER);
-        ChessFrame frame = new ChessFrame(layeredPane);
+        chessFrame = new ChessFrame(layeredPane);
         panel.start();
+    }
+
+    public void rematch() {
+        board = new ChessBoard();
+        board.newBoard();
+        timer = new Timer();
+        player1 = new Player("Player 1", 0);
+        player2 = new Player("Player 2", 1);
+        currentTurnsPlayer = player1;
+
+        initLayeredPane();
+        ChessPanel panel = new ChessPanel(this);
+        panel.setVisible(true);
+        layeredPane.add(panel, JLayeredPane.DEFAULT_LAYER);
+        chessFrame.add(layeredPane);
+
+//        panel.removeAll();
+
     }
 
     public void initLayeredPane() {
@@ -37,8 +58,9 @@ public class ChessGame {
 
     public void showWinScreen() {
         ChessGui gui = new ChessGui(this);
+        gui.setVisible(true);
         gui.checkMate();
-        layeredPane.add(gui);
+        layeredPane.add(gui, JLayeredPane.PALETTE_LAYER);
     }
 
     public ChessBoard getChessBoard() {
