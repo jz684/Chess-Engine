@@ -16,6 +16,8 @@ public class ChessPanel extends JPanel {
 
     private boolean flipped;
 
+    private boolean winScreenVisible = false;
+
     private BoardPosition highlightPosition = null;
 
 //    private ChessBoard chessBoard;
@@ -107,10 +109,19 @@ public class ChessPanel extends JPanel {
     }
 
     public void makeMove(Move move) {
-        System.out.println(move.toString());
+//        System.out.println(move.toString());
         // TODO
+
         chessGame.turn(move);
         flipped = chessGame.flipped();
+
+        if (!winScreenVisible && checkForMate()) {
+            winScreenVisible = true;
+
+            SwingUtilities.invokeLater(() ->
+                    winScreen(chessGame.getWinner())
+            );
+        }
         repaint();
     }
 
@@ -346,23 +357,12 @@ public class ChessPanel extends JPanel {
     }
 
     public void draw(Graphics g) {
-        running = !checkForMate();
 
-        if (running) {
-            removeAll();
-            drawBoard(g);
+        removeAll();
+        drawBoard(g);
 //            chessGame.printBoard();
-            drawPieces();
-            drawPossibleMoves(g);
-        }
-        else {
-            System.out.println("End running");
-            removeAll();
-            drawBoard(g);
-            drawPieces();
-//            System.out.println("Winner is :" + getWinner().toString());
-            winScreen(chessGame.getWinner());
-        }
+        drawPieces();
+        drawPossibleMoves(g);
 
 
     }
