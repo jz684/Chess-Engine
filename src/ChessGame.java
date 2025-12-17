@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 import java.sql.SQLOutput;
 import java.util.Timer;
 
@@ -9,6 +11,10 @@ public class ChessGame {
     private Player player2;
     private Player currentTurnsPlayer;
 
+    private JLayeredPane layeredPane;
+    private ChessFrame chessFrame;
+    private ChessPanel chessPanel;
+
     public ChessGame() {
         board = new ChessBoard();
         board.newBoard();
@@ -19,9 +25,42 @@ public class ChessGame {
     }
 
     public void startGame() throws MoveFormatException {
+        initLayeredPane();
         ChessPanel panel = new ChessPanel(this);
-        ChessFrame frame = new ChessFrame(panel);
+        layeredPane.add(panel, JLayeredPane.DEFAULT_LAYER);
+        chessFrame = new ChessFrame(layeredPane);
         panel.start();
+    }
+
+    public void rematch() {
+        board = new ChessBoard();
+        board.newBoard();
+        timer = new Timer();
+        player1 = new Player("Player 1", 0);
+        player2 = new Player("Player 2", 1);
+        currentTurnsPlayer = player1;
+
+        initLayeredPane();
+        ChessPanel panel = new ChessPanel(this);
+        panel.setVisible(true);
+        layeredPane.add(panel, JLayeredPane.DEFAULT_LAYER);
+        chessFrame.add(layeredPane);
+
+//        panel.removeAll();
+
+    }
+
+    public void initLayeredPane() {
+        layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(600, 600));
+        layeredPane.setVisible(true);
+    }
+
+    public void showWinScreen() {
+        ChessGui gui = new ChessGui(this);
+        gui.setVisible(true);
+        gui.checkMate();
+        layeredPane.add(gui, JLayeredPane.PALETTE_LAYER);
     }
 
     public ChessBoard getChessBoard() {
@@ -44,6 +83,15 @@ public class ChessGame {
 
     public boolean flipped() {
         return currentTurnsPlayer.getColor() == 1;
+    }
+
+    public Player getWinner() {
+        if (checkMate(board.whiteKing)) {
+            return player1;
+        }
+        else {
+            return player2;
+        }
     }
 
     public void turn(Move move) {
